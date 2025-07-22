@@ -1,0 +1,86 @@
+name: Build EXE Windows
+
+on:
+  [push]
+
+jobs:
+  build-exe:
+    runs-on: windows-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Get version from version.py
+        id: get_version
+        run: |
+          $match = Get-Content version.py | Select-String -Pattern "__version__\s*=\s*['""](.*?)['""]"
+          
+          if ($null -ne $match) 
+          {
+            $version = $match.Matches.Groups[1].Value
+            echo "VERSION=$version" >> $env:GITHUB_ENV
+            echo "Successfully found version: $version"
+          } 
+          else 
+          {
+            echo "::error::Could not find a line matching '__version__ = \"x.x.x\"' in version.py"
+            exit 1
+          }
+        shell: pwsh
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt pyinstaller
+
+      - name: Build Windows EXE
+        run: |
+          pyinstaller --onefile --windowed --name BeautyCenter `
+          --collect-all PySide6 `
+          --add-data "ui/main_window;ui/main_window" `
+          main.py
+
+      - name: Run Smoke Test on the EXE
+        run: |
+          echo "Starting smoke test..."
+          
+          Start-Process -FilePath "dist/BeautyCenter.exe"
+          
+          Start-Sleep -Seconds 5
+
+          $process = Get-Process -Name "BeautyCenter" -ErrorAction SilentlyContinue
+          
+          if ($null -ne $process) 
+          {
+            echo "Smoke Test PASSED: The process is still running."
+            Stop-Process -Name "BeautyCenter"
+            exit 0
+          } 
+          else
+          {
+            echo "::error::Smoke Test FAILED: The process crashed or did not start correctly."
+            exit 1
+          }
+        shell: pwsh
+          
+      - name: Create or Update Latest Release
+        uses: softprops/action-gh-release@v2
+        with:
+          body: |
+            Latest development build.
+            Version: ${{ env.VERSION }}
+            Commit: ${{ github.sha }}
+          name: Beauty Center ${{ env.VERSION }}
+          tag_name: latest-build
+          prerelease: true
+          files: |
+            dist/BeautyCenter.exe
