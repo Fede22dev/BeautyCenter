@@ -22,8 +22,17 @@ jobs:
       - name: Get version from version.py
         id: get_version
         run: |
-          $version = (Get-Content version.py | Select-String -Pattern "VERSION\s*=\s*['""](.*?)['""]").Matches.Groups[1].Value
-          echo "VERSION=$version" >> $env:GITHUB_ENV
+          $match = Get-Content version.py | Select-String -Pattern "__version__\s*=\s*['""](.*?)['""]"
+          
+          if ($null -ne $match) 
+          {
+            $version = $match.Matches.Groups[1].Value
+            echo "VERSION=$version" >> $env:GITHUB_ENV
+            echo "Successfully found version: $version"
+          } else {
+            echo "::error::Could not find a line matching '__version__ = \"x.x.x\"' in version.py"
+            exit 1
+          }
         shell: pwsh
 
       - name: Install dependencies
