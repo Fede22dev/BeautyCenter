@@ -1,0 +1,81 @@
+# -------------------------------
+# Python cache and bytecode
+# -------------------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+.eggs/
+dist/
+build/
+*.log
+
+# -------------------------------
+# Virtual environments
+# -------------------------------
+.venv/
+venv/
+env/
+# These folders contain local Python environments, typically created by PyCharm or manually.
+# Always exclude them from version control.
+
+# -------------------------------
+# SQLite database
+# -------------------------------
+*.sqlite3
+*.db
+# Comment the line above (*.sqlite3) if you want to version-control a pre-populated database file
+# (e.g., with demo data or test records).
+# In production, it's usually best to exclude database files from git.
+
+# -------------------------------
+# Qt / PySide / PyQt generated files
+# -------------------------------
+*.qrc.py
+*.ui.py
+*.qrc
+*.qmlc
+*.jsc
+*.moc
+moc_*.cpp
+qrc_*.cpp
+ui_*.h
+# These are generated files from Qt tools (e.g., `pyside6-uic`, `pyrcc`) — no need to version them.
+
+# -------------------------------
+# PyCharm project files
+# -------------------------------
+.idea/
+*.iml
+*.iws
+.idea/httpRequests/
+# IDE-specific configs — not needed for collaborators or CI/CD pipelines.
+
+# -------------------------------
+# Testing and coverage
+# -------------------------------
+.pytest_cache/
+.tox/
+.coverage
+htmlcov/
+.cache
+
+# -------------------------------
+# Static analysis & typing
+# -------------------------------
+.mypy_cache/
+.pytype/
+
+# -------------------------------
+# Jupyter
+# -------------------------------
+.ipynb_checkpoints/
+
+# -------------------------------
+# OS-specific files
+# -------------------------------
+.DS_Store
+Thumbs.db
