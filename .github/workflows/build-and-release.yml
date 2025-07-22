@@ -29,7 +29,9 @@ jobs:
             $version = $match.Matches.Groups[1].Value
             echo "VERSION=$version" >> $env:GITHUB_ENV
             echo "Successfully found version: $version"
-          } else {
+          } 
+          else 
+          {
             echo "::error::Could not find a line matching '__version__ = \"x.x.x\"' in version.py"
             exit 1
           }
@@ -40,9 +42,35 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt pyinstaller
 
-      - name: Build EXE
+      - name: Build Windows EXE
         run: |
-          pyinstaller --onefile --windowed --name BeautyCenter --collect-all PySide6 main.py
+          pyinstaller --onefile --windowed --name BeautyCenter `
+          --collect-all PySide6 `
+          --add-data "ui/main_window;ui/main_window" `
+          main.py
+
+      - name: Run Smoke Test on the EXE
+        run: |
+          echo "Starting smoke test..."
+          
+          Start-Process -FilePath "dist/BeautyCenter.exe"
+          
+          Start-Sleep -Seconds 5
+
+          $process = Get-Process -Name "BeautyCenter" -ErrorAction SilentlyContinue
+          
+          if ($null -ne $process) 
+          {
+            echo "Smoke Test PASSED: The process is still running."
+            Stop-Process -Name "BeautyCenter"
+            exit 0
+          } 
+          else
+          {
+            echo "::error::Smoke Test FAILED: The process crashed or did not start correctly."
+            exit 1
+          }
+        shell: pwsh
           
       - name: Create or Update Latest Release
         uses: softprops/action-gh-release@v2
@@ -51,7 +79,7 @@ jobs:
             Latest development build.
             Version: ${{ env.VERSION }}
             Commit: ${{ github.sha }}
-          name: Nightly Build ${{ env.VERSION }}
+          name: Beauty Center ${{ env.VERSION }}
           tag_name: latest-build
           prerelease: true
           files: |
