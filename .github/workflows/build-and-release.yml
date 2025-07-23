@@ -41,6 +41,15 @@ jobs:
           echo "UPX_PATH=$upxDir" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         shell: pwsh
 
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~\AppData\Local\pip\Cache
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -117,9 +126,8 @@ jobs:
           }
         shell: pwsh
 
-      - name: Rename EXE with spaces for GitHub Release
-        run: |
-          mv "dist/Beauty.Center.v.${{ env.APP_VERSION }}.exe" "dist/${{ env.APP_NAME }} v. ${{ env.APP_VERSION }}.exe"
+      - name: List dist directory before rename
+        run: ls -l dist
         shell: bash
 
       - name: Create or Update Latest Release
