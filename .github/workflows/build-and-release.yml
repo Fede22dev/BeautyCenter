@@ -74,6 +74,40 @@ jobs:
       - name: Build Windows EXE
         run: ./build_exe_beauty_center.ps1
 
+      - name: Delete previous latest-build release and tag (if present)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          $headers = @{
+            Authorization = "Bearer $env:GITHUB_TOKEN"
+            Accept = "application/vnd.github+json"
+            "User-Agent" = "gh-actions"
+          }
+          try 
+          {
+            $release = Invoke-RestMethod -Headers $headers -Uri "https://api.github.com/repos/${{ github.repository }}/releases/tags/latest-build"
+            if ($release.id)
+            {
+              Invoke-RestMethod -Headers $headers -Uri "https://api.github.com/repos/${{ github.repository }}/releases/$($release.id)" -Method DELETE
+              Write-Host "Deleted previous release with tag 'latest-build'"
+            }
+          } 
+          catch 
+          {
+            Write-Host "No existing release with tag 'latest-build' found (nothing to delete)"
+          }
+
+          try 
+          {
+            git push origin :refs/tags/latest-build
+            Write-Host "Deleted tag 'latest-build' on remote (if existed)"
+          } 
+          catch 
+          {
+            Write-Host "No existing tag 'latest-build' found (nothing to delete)"
+          }
+        shell: pwsh
+
       - name: Create or Update Latest Release
         uses: softprops/action-gh-release@v2
         with:
@@ -83,6 +117,5 @@ jobs:
             Commit: ${{ github.sha }}
           name: ${{ env.APP_NAME }} v. ${{ env.APP_VERSION }}
           tag_name: latest-build
-          prerelease: true
           files: |
             dist/${{ env.APP_NAME }} v. ${{ env.APP_VERSION }}.exe
