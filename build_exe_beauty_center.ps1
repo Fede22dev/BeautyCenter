@@ -81,6 +81,7 @@ $pyArgs = @(
     "--add-data", "ui/main_window;ui/main_window",
     "--splash", "resources/a350.png"
 )
+
 if ($upx_flag)
 {
     $pyArgs += $upx_flag

@@ -1,10 +1,11 @@
 # 💅 BeautyCenter
 
-[![Build Status](https://github.com/Fede22dev/BeautyCenter/actions/workflows/build-and-release.yml/badge.svg)]()
+[![Build Status](https://github.com/Fede22dev/BeautyCenter/actions/workflows/build-and-release.yml/badge.svg)](https://github.com/Fede22dev/BeautyCenter/actions/workflows/build-and-release.yml)
+[![Pytest status](https://github.com/yourusername/yourrepo/actions/workflows/pytest.yml/badge.svg)](https://github.com/Fede22dev/BeautyCenter/actions/workflows/pytest.yml)
+[![Bandit Status](https://github.com/yourusername/yourrepo/actions/workflows/bandit.yml/badge.svg)](https://github.com/Fede22dev/BeautyCenter/actions/workflows/bandit.yml)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)]()
 [![PySide6](https://img.shields.io/badge/Qt-PySide6-6f42c1.svg)]()
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)]()
-[![Status: Alpha](https://img.shields.io/badge/status-alpha-yellow.svg)]()
 
 ---
 

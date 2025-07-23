@@ -3,6 +3,9 @@ name: Build EXE Windows
 on:
   [ push ]
 
+env:
+  RELEASE_TAG: latest-build
+
 jobs:
   build-exe:
     runs-on: windows-latest
@@ -20,8 +23,14 @@ jobs:
           python-version: '3.13'
 
       - name: Install UPX
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          $release = Invoke-RestMethod -Uri 'https://api.github.com/repos/upx/upx/releases/latest'
+          $release = Invoke-RestMethod -Uri 'https://api.github.com/repos/upx/upx/releases/latest' -Headers @{
+            "Authorization" = "Bearer $env:GITHUB_TOKEN"
+            "Accept"        = "application/vnd.github+json"
+            "User-Agent"    = "GH-Actions-UPX"
+          }
           $asset = $release.assets | Where-Object { $_.name -like '*-win64.zip' }
           $downloadUrl = $asset.browser_download_url
           Invoke-WebRequest -Uri $downloadUrl -OutFile 'upx.zip'
@@ -32,7 +41,16 @@ jobs:
           echo "UPX_PATH=$upxDir" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         shell: pwsh
 
-      - name: Get version from name_version.py
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Install PyInstaller
+        run: |
+          python -m pip install pyinstaller
+
+      - name: Get name version app from name_version.py
         id: get_version
         run: |
           $nameMatch = Get-Content name_version.py | Select-String -Pattern "APP_NAME\s*=\s*['""](.*?)['""]"
@@ -62,19 +80,10 @@ jobs:
           }
         shell: pwsh
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Install PyInstaller
-        run: |
-          python -m pip install pyinstaller
-
       - name: Build Windows EXE
         run: ./build_exe_beauty_center.ps1
 
-      - name: Delete previous latest-build release and tag (if present)
+      - name: Delete previous release and tag (if present)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -83,39 +92,39 @@ jobs:
             Accept = "application/vnd.github+json"
             "User-Agent" = "gh-actions"
           }
-          try 
+          try
           {
-            $release = Invoke-RestMethod -Headers $headers -Uri "https://api.github.com/repos/${{ github.repository }}/releases/tags/latest-build"
-            if ($release.id)
+            $release = Invoke-RestMethod -Headers $headers -Uri "https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ env.RELEASE_TAG }}"
+          
+            if ($release.id) 
             {
               Invoke-RestMethod -Headers $headers -Uri "https://api.github.com/repos/${{ github.repository }}/releases/$($release.id)" -Method DELETE
-              Write-Host "Deleted previous release with tag 'latest-build'"
+              Write-Host "Deleted previous release with tag '${{ env.RELEASE_TAG }}'"
             }
           } 
           catch 
           {
-            Write-Host "No existing release with tag 'latest-build' found (nothing to delete)"
+            Write-Host "No existing release found"
           }
-
           try 
           {
-            git push origin :refs/tags/latest-build
-            Write-Host "Deleted tag 'latest-build' on remote (if existed)"
+            git push origin :refs/tags/${{ env.RELEASE_TAG }}
+            Write-Host "Deleted tag '${{ env.RELEASE_TAG }}' on remote (if existed)"
           } 
           catch 
           {
-            Write-Host "No existing tag 'latest-build' found (nothing to delete)"
+            Write-Host "No tag to delete"
           }
         shell: pwsh
 
       - name: Create or Update Latest Release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ env.RELEASE_TAG }}
+          name: ${{ env.APP_NAME }} v. ${{ env.APP_VERSION }}
           body: |
             Latest development build.
-            Version: ${{ env.VERSION }}
+            Version: ${{ env.APP_VERSION }}
             Commit: ${{ github.sha }}
-          name: ${{ env.APP_NAME }} v. ${{ env.APP_VERSION }}
-          tag_name: latest-build
           files: |
             dist/${{ env.APP_NAME }} v. ${{ env.APP_VERSION }}.exe
