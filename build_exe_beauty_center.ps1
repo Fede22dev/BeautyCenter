@@ -69,7 +69,6 @@ else
 # --- BUILD FINAL EXE ---
 Write-Host "Building: $exe_name, Version: $exe_version, PyInstaller flags: $console_or_windowed_flag $upx_flag"
 Write-Host "PyInstaller command will be run from: $( Get-Location )"
-Get-ChildItem -Name
 
 pyinstaller --onefile $console_or_windowed_flag --name $exe_name `
     --collect-submodules PySide6.QtCore `
@@ -77,5 +76,4 @@ pyinstaller --onefile $console_or_windowed_flag --name $exe_name `
     --collect-submodules PySide6.QtUiTools `
     --collect-submodules PySide6.QtWidgets `
     --add-data "ui/main_window;ui/main_window" `
-    --splash "resources/a350.png" `
-    $upx_flag main.py
+    --splash "resources/a350.png" $upx_flag main.py
