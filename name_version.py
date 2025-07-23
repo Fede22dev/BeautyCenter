@@ -1,3 +1,6 @@
+APP_NAME = "Beauty Center"
+GITHUB_REPO_NAME = "Fede22dev/BeautyCenter"
+
 """
 App version following Semantic Versioning (SemVer):
 
@@ -20,5 +23,4 @@ Example:
  1.1.1 = bug fix on version 1.1.0
  2.0.0 = breaking change, major rewrite
 """
-
-__version__ = "0.0.1"
+APP_VERSION = "0.0.2"

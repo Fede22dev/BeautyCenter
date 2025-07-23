@@ -12,6 +12,7 @@ __pycache__/
 dist/
 build/
 *.log
+*.spec
 
 # -------------------------------
 # Virtual environments
