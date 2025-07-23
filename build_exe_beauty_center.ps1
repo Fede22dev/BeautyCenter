@@ -70,10 +70,23 @@ else
 Write-Host "Building: $exe_name, Version: $exe_version, PyInstaller flags: $console_or_windowed_flag $upx_flag"
 Write-Host "PyInstaller command will be run from: $( Get-Location )"
 
-pyinstaller --onefile $console_or_windowed_flag --name $exe_name `
-    --collect-submodules PySide6.QtCore `
-    --collect-submodules PySide6.QtNetwork `
-    --collect-submodules PySide6.QtUiTools `
-    --collect-submodules PySide6.QtWidgets `
-    --add-data "ui/main_window;ui/main_window" `
-    --splash "resources/a350.png" $upx_flag main.py
+$pyArgs = @(
+    "--onefile",
+    $console_or_windowed_flag,
+    "--name", "$exe_name",
+    "--collect-submodules", "PySide6.QtCore",
+    "--collect-submodules", "PySide6.QtNetwork",
+    "--collect-submodules", "PySide6.QtUiTools",
+    "--collect-submodules", "PySide6.QtWidgets",
+    "--add-data", "ui/main_window;ui/main_window",
+    "--splash", "resources/a350.png"
+)
+if ($upx_flag)
+{
+    $pyArgs += $upx_flag
+}
+
+$pyArgs += "main.py"
+
+Write-Host "PyInstaller command: pyinstaller $( $pyArgs -join ' ' )"
+pyinstaller @pyArgs
