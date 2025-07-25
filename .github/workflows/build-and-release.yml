@@ -50,10 +50,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
 
-      - name: Install dependencies
+      - name: Setup venv and install dependencies
         run: |
+          python -m venv .venv
+          .\.venv\Scripts\Activate.ps1
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+        shell: pwsh
 
       - name: Install PyInstaller
         run: |
