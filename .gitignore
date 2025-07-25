@@ -41,9 +41,11 @@ env/
 *.qmlc
 *.jsc
 *.moc
+*.qm
 moc_*.cpp
 qrc_*.cpp
 ui_*.h
+/ui/generated_ui/
 # These are generated files from Qt tools (e.g., `pyside6-uic`, `pyrcc`) — no need to version them.
 
 # -------------------------------
