@@ -1,16 +1,20 @@
 Write-Host ""
 Write-Host "==================== QT TRANSLATION AUTO-SYNC SCRIPT ====================" -ForegroundColor Yellow
 
-# --- Universal detection of venv/bin path (local .venv or GitHub Actions venv) ---
+$ProjectRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 if ($env:CI -ne 'true')
 {
-    # Default: local .venv
-    $ProjectRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
     $VenvScripts = Join-Path $ProjectRoot ".venv\Scripts"
     Write-Host "[ENV DETECT] Using local .venv: $VenvScripts"
 }
 else
 {
+    if (-not $env:VIRTUAL_ENV)
+    {
+        Write-Error "[ENV DETECT] CI true, but VIRTUAL_ENV is NOT set! Are you sure your virtual environment is active?" -ForegroundColor Red
+        exit 1
+    }
+
     $VenvScripts = Join-Path $env:VIRTUAL_ENV "Scripts"
     Write-Host "[ENV DETECT] Using VIRTUAL_ENV: $VenvScripts"
 }

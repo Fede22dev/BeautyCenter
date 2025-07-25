@@ -275,7 +275,7 @@ def _check_is_latest_release() -> None:
     qInfo(f"{_ID_TAG} {message}")
 
     try:
-        with requests.get(download_url, stream=True) as response:
+        with requests.get(download_url, timeout=5, stream=True) as response:
             response.raise_for_status()
             total = int(response.headers.get('content-length', 0))
 
