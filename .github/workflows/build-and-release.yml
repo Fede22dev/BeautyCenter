@@ -50,21 +50,19 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
 
-      - name: Setup venv and install dependencies
+      - name: Build Windows EXE (venv + deps + pyinstaller)
+        env:
+          APP_NAME: ${{ env.APP_NAME }}
+          APP_VERSION: ${{ env.APP_VERSION }}
         run: |
           python -m venv .venv
           .\.venv\Scripts\Activate.ps1
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-        shell: pwsh
-
-      - name: Install PyInstaller
-        run: |
-          python -m pip install pyinstaller
-
-      - name: Get name version app from name_version.py
-        id: get_version
-        run: |
+          pip install pyinstaller
+         
+          pip show requests; pip show pyinstaller
+          
           $nameMatch = Get-Content name_version.py | Select-String -Pattern "APP_NAME\s*=\s*['""](.*?)['""]"
           if ($null -ne $nameMatch) 
           {
@@ -77,7 +75,6 @@ jobs:
             echo "::error::APP_NAME not found in name_version.py"
             exit 1
           }
-          
           $versionMatch = Get-Content name_version.py | Select-String -Pattern "APP_VERSION\s*=\s*['""](.*?)['""]"
           if ($null -ne $versionMatch) 
           {
@@ -90,10 +87,9 @@ jobs:
             echo "::error::APP_VERSION not found in name_version.py"
             exit 1
           }
+         
+          ./build_exe_beauty_center.ps1
         shell: pwsh
-
-      - name: Build Windows EXE
-        run: ./build_exe_beauty_center.ps1
 
       - name: Delete previous release and tag (if present)
         env:

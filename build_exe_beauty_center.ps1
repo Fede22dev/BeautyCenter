@@ -109,7 +109,7 @@ else
 
 # --- BUILD FINAL EXE ---
 Write-Host "`n[STEP] Building EXE..."
-Write-Host "         Name: $exe_name"
+Write-Host "      Name: $exe_name"
 Write-Host "      Version: $exe_version"
 Write-Host "      Console/Window: $console_or_windowed_flag"
 Write-Host "      UPX: $upx_flag"
