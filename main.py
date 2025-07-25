@@ -343,8 +343,12 @@ def _start_local_server(instance_server_name: str) -> None:
 
 
 def main() -> int:
-    sys.stdout.reconfigure(line_buffering=True)
-    sys.stderr.reconfigure(line_buffering=True)
+    # Only reconfigure if the stream exists and supports this method (prevents crash in PyInstaller --windowed EXE)
+    if sys.stdout and hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(line_buffering=True)
+
+    if sys.stderr and hasattr(sys.stderr, "reconfigure"):
+        sys.stderr.reconfigure(line_buffering=True)
 
     QLoggingCategory.defaultCategory().setEnabled(QtMsgType.QtDebugMsg, True)
 
