@@ -11,7 +11,7 @@ else
 {
     if (-not $env:VIRTUAL_ENV)
     {
-        Write-Error "[ENV DETECT] CI true, but VIRTUAL_ENV is NOT set! Are you sure your virtual environment is active?" -ForegroundColor Red
+        Write-Host "[ENV DETECT] CI true, but VIRTUAL_ENV is NOT set! Are you sure your virtual environment is active?" -ForegroundColor Red
         exit 1
     }
 
