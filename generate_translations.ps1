@@ -2,22 +2,15 @@ Write-Host ""
 Write-Host "==================== QT TRANSLATION AUTO-SYNC SCRIPT ====================" -ForegroundColor Yellow
 
 $ProjectRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
-if ($env:CI -ne 'true')
-{
-    $VenvScripts = Join-Path $ProjectRoot ".venv\Scripts"
-    Write-Host "[ENV DETECT] Using local .venv: $VenvScripts"
-}
-else
-{
-    if (-not $env:VIRTUAL_ENV)
-    {
-        Write-Host "[ENV DETECT] CI true, but VIRTUAL_ENV is NOT set! Are you sure your virtual environment is active?" -ForegroundColor Red
-        exit 1
-    }
+$VenvScripts = Join-Path $ProjectRoot ".venv\Scripts"
 
-    $VenvScripts = Join-Path $env:VIRTUAL_ENV "Scripts"
-    Write-Host "[ENV DETECT] Using VIRTUAL_ENV: $VenvScripts"
+# Check if the venv exists
+if (-not (Test-Path $VenvScripts)) {
+    Write-Error "[ERROR] .venv\Scripts not found! Did you create and activate the virtual environment in the project folder?"
+    exit 1
 }
+
+Write-Host "[ENV DETECT] Using .venv path: $VenvScripts"
 
 $TranslationDir = Join-Path $ProjectRoot "translations"
 $LupdateExe = Join-Path $VenvScripts "pyside6-lupdate.exe"
