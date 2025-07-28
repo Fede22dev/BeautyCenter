@@ -67,7 +67,9 @@ jobs:
           
           pip show requests; pip show pyinstaller
           
-          $nameMatch = Get-Content name_version.py | Select-String -Pattern "APP_NAME\s*=\s*['""](.*?)['""]"
+          $filePath = "src/beauty_center/name_version.py"
+          
+          $nameMatch = Get-Content $filePath | Select-String -Pattern "APP_NAME\s*=\s*['""](.*?)['""]"
           if ($null -ne $nameMatch) 
           {
             $appName = $nameMatch.Matches.Groups[1].Value
@@ -76,10 +78,10 @@ jobs:
           } 
           else 
           {
-            echo "::error::APP_NAME not found in name_version.py"
+            echo "::error::APP_NAME not found in $filePath"
             exit 1
           }
-          $versionMatch = Get-Content name_version.py | Select-String -Pattern "APP_VERSION\s*=\s*['""](.*?)['""]"
+          $versionMatch = Get-Content $filePath | Select-String -Pattern "APP_VERSION\s*=\s*['""](.*?)['""]"
           if ($null -ne $versionMatch) 
           {
             $appVersion = $versionMatch.Matches.Groups[1].Value
@@ -88,7 +90,7 @@ jobs:
           } 
           else 
           {
-            echo "::error::APP_VERSION not found in name_version.py"
+            echo "::error::APP_VERSION not found in $filePath"
             exit 1
           }
           
