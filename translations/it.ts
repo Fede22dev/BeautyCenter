@@ -42,93 +42,93 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="../main.py" line="35"/>
+        <location filename="../main.py" line="34"/>
         <source>DEBUG</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.py" line="36"/>
+        <location filename="../main.py" line="35"/>
         <source>INFO</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.py" line="37"/>
+        <location filename="../main.py" line="36"/>
         <source>WARNING</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.py" line="38"/>
+        <location filename="../main.py" line="37"/>
         <source>CRITICAL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.py" line="39"/>
+        <location filename="../main.py" line="38"/>
         <source>FATAL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.py" line="42"/>
+        <location filename="../main.py" line="41"/>
         <source>UNKNOWN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.py" line="62"/>
+        <location filename="../main.py" line="61"/>
         <source>Deleted old executable: {old_path}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.py" line="69"/>
+        <location filename="../main.py" line="68"/>
         <source>Old executable not found: {old_path}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.py" line="74"/>
+        <location filename="../main.py" line="73"/>
         <source>Failed to delete old executable: {old_path}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.py" line="88"/>
-        <location filename="../main.py" line="119"/>
-        <location filename="../main.py" line="337"/>
-        <location filename="../main.py" line="398"/>
-        <location filename="../main.py" line="429"/>
+        <location filename="../main.py" line="87"/>
+        <location filename="../main.py" line="118"/>
+        <location filename="../main.py" line="336"/>
+        <location filename="../main.py" line="397"/>
+        <location filename="../main.py" line="428"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.py" line="88"/>
+        <location filename="../main.py" line="87"/>
         <source>Failed to copy new executable:
 {source_path}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.py" line="94"/>
+        <location filename="../main.py" line="93"/>
         <source>Copied new executable: {target_path}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.py" line="110"/>
+        <location filename="../main.py" line="109"/>
         <source>Stopped and running new executable: {exe_path}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.py" line="119"/>
+        <location filename="../main.py" line="118"/>
         <source>Failed to stop and run new executable:
 {exe_path}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.py" line="134"/>
+        <location filename="../main.py" line="133"/>
         <source>Executable path is correct: {current_exe_path}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.py" line="143"/>
+        <location filename="../main.py" line="142"/>
         <source>Incorrect Executable Path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.py" line="144"/>
+        <location filename="../main.py" line="143"/>
         <source>The executable has been moved in other dir:
 Expected: {expected_path}
 Found: {current_exe_path}
@@ -137,17 +137,17 @@ The correct path will now be restored.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.py" line="164"/>
+        <location filename="../main.py" line="163"/>
         <source>Executable name is correct: {current_name}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.py" line="173"/>
+        <location filename="../main.py" line="172"/>
         <source>Incorrect Executable Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.py" line="174"/>
+        <location filename="../main.py" line="173"/>
         <source>The executable has been renamed:
 Expected: {expected_name}
 Found: {current_name}
@@ -156,37 +156,37 @@ The correct name will now be restored.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.py" line="192"/>
+        <location filename="../main.py" line="191"/>
         <source>Connection quality is good: {latency} ms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.py" line="198"/>
+        <location filename="../main.py" line="197"/>
         <source>Connection quality is bad, unable to check new version: {latency} ms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.py" line="204"/>
+        <location filename="../main.py" line="203"/>
         <source>Failed to check connection quality, unable to check new version: {exception}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.py" line="220"/>
+        <location filename="../main.py" line="219"/>
         <source>Failed to check for latest release: {api_url} Error: {exception}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.py" line="241"/>
+        <location filename="../main.py" line="240"/>
         <source>No new version found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.py" line="248"/>
+        <location filename="../main.py" line="247"/>
         <source>New Version Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.py" line="250"/>
+        <location filename="../main.py" line="249"/>
         <source>A new version is available:
 Local version: {curr_ver}
 Remote version: {latest_ver}
@@ -195,77 +195,77 @@ Download now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.py" line="256"/>
+        <location filename="../main.py" line="255"/>
         <source>Download cancelled.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.py" line="260"/>
+        <location filename="../main.py" line="259"/>
         <source>Downloading latest version...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.py" line="271"/>
+        <location filename="../main.py" line="270"/>
         <source>Failed to get download URL for latest release.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.py" line="276"/>
+        <location filename="../main.py" line="275"/>
         <source>Downloading latest version {display_name} from ({download_url})</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.py" line="286"/>
+        <location filename="../main.py" line="285"/>
         <source>Downloading latest version {display_name} to ({out_path})</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.py" line="308"/>
+        <location filename="../main.py" line="307"/>
         <source>Failed to download latest version:
 {exception}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.py" line="315"/>
+        <location filename="../main.py" line="314"/>
         <source>Downloaded latest version {display_name} to ({out_path})</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.py" line="338"/>
+        <location filename="../main.py" line="337"/>
         <source>Failed to start local server:
 {instance_server_name}
 Error: {error}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.py" line="370"/>
+        <location filename="../main.py" line="369"/>
         <source>Loaded Italian translation.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.py" line="374"/>
+        <location filename="../main.py" line="373"/>
         <source>Italian translation not found. Use default English translation.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.py" line="399"/>
+        <location filename="../main.py" line="398"/>
         <source>Unexpected positional argument(s) found:
 {positional_args}.
 Use --help or -h for usage information.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.py" line="429"/>
+        <location filename="../main.py" line="428"/>
         <source>Another instance of {app_name} is already running.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.py" line="442"/>
+        <location filename="../main.py" line="441"/>
         <source>Loaded style {file_name}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main.py" line="445"/>
+        <location filename="../main.py" line="444"/>
         <source>Failed to load style {file_name}</source>
         <translation type="unfinished"></translation>
     </message>

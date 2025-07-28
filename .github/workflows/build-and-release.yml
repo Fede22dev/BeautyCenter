@@ -13,14 +13,27 @@ jobs:
     permissions:
       contents: write
 
+    strategy:
+      matrix:
+        python-version: [ "3.13" ]
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Python
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~\AppData\Local\pip\Cache
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Setup Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with:
-          python-version: '3.13'
+          python-version: ${{ matrix.python-version }}
 
       - name: Install UPX
         env:
@@ -40,15 +53,6 @@ jobs:
           echo "$upxDir" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
           echo "UPX_PATH=$upxDir" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         shell: pwsh
-
-      - name: Cache pip dependencies
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~\AppData\Local\pip\Cache
-          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
 
       - name: Build Windows EXE (venv + deps + pyinstaller)
         env:

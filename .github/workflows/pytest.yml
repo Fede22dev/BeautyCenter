@@ -11,21 +11,54 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
+    strategy:
+      matrix:
+        python-version: ['3.13']
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Install Qt + OpenGL + system libs for PySide6
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libegl1 \
+            libglib2.0-0 \
+            libx11-xcb1 \
+            libxkbcommon-x11-0 \
+            libxrender1 \
+            libsm6 \
+            libxext6 \
+            libglu1-mesa \
+            libgl1-mesa-glx \
+            libopengl0 \
+            xvfb
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with:
-          python-version: '3.13'
+          python-version: ${{ matrix.python-version }}
 
-      - name: Install dependencies
+      - name: Upgrade pip and install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install pytest
 
-      - name: Run Pytest
-        run: pytest --maxfail=1 --disable-warnings --exitfirst || test $? -eq 5
+      - name: Version & debug info
+        run: |
+          python --version
+          pip show PySide6
+          pip freeze
+
+      - name: Run Pytest (headless)
+        run: |
+          xvfb-run -a pytest --junitxml=pytest-report.xml --maxfail=1 --disable-warnings --exitfirst || test $? -eq 5
