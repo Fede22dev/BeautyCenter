@@ -64,7 +64,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install pyinstaller
-         
+          
           pip show requests; pip show pyinstaller
           
           $nameMatch = Get-Content name_version.py | Select-String -Pattern "APP_NAME\s*=\s*['""](.*?)['""]"
@@ -91,7 +91,7 @@ jobs:
             echo "::error::APP_VERSION not found in name_version.py"
             exit 1
           }
-         
+          
           ./scripts/build_exe_beauty_center.ps1
         shell: pwsh
 
@@ -122,7 +122,7 @@ jobs:
           {
             git push origin :refs/tags/${{ env.RELEASE_TAG }}
             Write-Host "Deleted tag '${{ env.RELEASE_TAG }}' on remote (if existed)"
-          } 
+          }
           catch 
           {
             Write-Host "No tag to delete"

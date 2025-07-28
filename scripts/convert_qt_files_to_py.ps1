@@ -7,9 +7,9 @@ Write-Host "[STEP 1/6] Setting paths..." -ForegroundColor Magenta
 $ScriptPath  = $PSScriptRoot
 $ProjectRoot = Split-Path $ScriptPath -Parent
 
-$inputDir        = Join-Path $ProjectRoot "ui" "views"
-$outputDir       = Join-Path $ProjectRoot "ui" "generated_ui"
-$resourcesDir    = Join-Path $ProjectRoot "resources"
+$inputDir        = Join-Path $ProjectRoot "src" "beauty_center" "ui" "views"
+$outputDir       = Join-Path $ProjectRoot "src" "beauty_center" "ui" "generated_ui"
+$resourcesDir    = Join-Path $ProjectRoot "src" "beauty_center" "resources"
 $qrcDir          = Join-Path $resourcesDir "qrc"
 $iconsQrc        = Join-Path $qrcDir "icons.qrc"
 $imagesQrc       = Join-Path $qrcDir "images.qrc"

@@ -11,17 +11,15 @@ from PySide6.QtWidgets import QApplication, QMessageBox, QProgressDialog
 from packaging import version
 from tqdm import tqdm
 
-from ui.controllers.main_window import BeautyCenterMainWindow
-from utilities.utilities import qFatal, get_desktop_path
-
+from name_version import APP_VERSION, APP_NAME, GITHUB_REPO_NAME
 from resources.generated_qrc import styles_rc  # noqa: F401
+from ui.controllers.main_window import BeautyCenterMainWindow
+from utilities.utilities import qFatal, get_desktop_path, get_resource_path
 
 try:
     import pyi_splash
 except ImportError:
     pyi_splash = None
-
-from name_version import APP_NAME, APP_VERSION, GITHUB_REPO_NAME
 
 _ID_TAG = "[MAIN]"
 _LOG_LEVEL = "debug"
@@ -363,8 +361,9 @@ def main() -> int:
     locale = QLocale.system()
     translator = QTranslator()
     if locale.language() == QLocale.Language.Italian:
-        if translator.load("it.qm", "translations/generated_qm"):
+        if translator.load(get_resource_path("translations/generated_qm/it.qm")):
             app.installTranslator(translator)
+
             message = QCoreApplication.translate("main", "Loaded Italian translation.")
             qDebug(f"{_ID_TAG} {message}")
         else:

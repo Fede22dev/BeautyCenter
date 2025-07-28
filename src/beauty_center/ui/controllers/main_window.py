@@ -2,7 +2,7 @@ from PySide6.QtCore import QPropertyAnimation, QEasingCurve
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QMainWindow, QPushButton
 
-from ui.generated_ui.main_window import Ui_beauty_center_main_window
+from ui.generated_ui.main_window import Ui_beauty_center_main_window # noqa: F401
 
 
 class BeautyCenterMainWindow(QMainWindow):

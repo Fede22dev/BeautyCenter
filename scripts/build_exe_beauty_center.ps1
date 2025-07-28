@@ -6,8 +6,14 @@ Write-Host "=== [AUTO-BUILD SCRIPT] ===" -ForegroundColor Cyan
 $ScriptPath = $PSScriptRoot
 $ProjectRoot = Split-Path $ScriptPath -Parent
 $exeDir = Join-Path $ProjectRoot "exe"
+$name_version_file = Join-Path $ProjectRoot "src" "beauty_center" "name_version.py"
 
-$name_version_file = Join-Path $ProjectRoot "name_version.py"
+if (-not (Test-Path $name_version_file))
+{
+    Write-Error "[FATAL] name_version.py not found! (Expected: $name_version_file)"
+    exit 1
+}
+
 $version_line = Get-Content $name_version_file | Where-Object { $_ -match 'APP_VERSION' }
 $exe_version = ($version_line -split '=')[1].Trim().Trim("'").Trim('"')
 
@@ -15,13 +21,11 @@ $console_or_windowed_flag = ""
 $exe_name = ""
 $upx_flag = ""
 
-
 if ($env:CI -ne 'true')
 {
     # --- Local Environment Detected ---
     Write-Host "[INFO] Local build detected." -ForegroundColor Green
 
-    # Activate the Python virtual environment
     $activate_script = Join-Path $ProjectRoot ".venv\Scripts\activate.ps1"
     if (Test-Path $activate_script)
     {
@@ -34,18 +38,12 @@ if ($env:CI -ne 'true')
         exit 1
     }
 
-    # Set flag for local debug mode (console)
     $console_or_windowed_flag = "--console"
-
-    # Executable will have "DBG" suffix for local debug builds
     $exe_name = "Beauty Center DBG v. $exe_version"
-
-    # Check for UPX in the default local path; update this path if needed
     $local_upx_path = "C:\Program Files\upx" # <-- MODIFY THIS IF YOUR UPX IS ELSEWHERE
     if (Test-Path $local_upx_path)
     {
         Write-Host "[INFO] UPX found at '$local_upx_path'. Compression will be enabled."
-        # Set UPX flag to local path
         $upx_flag = "--upx-dir=$local_upx_path"
     }
     else
@@ -57,18 +55,12 @@ else
 {
     # --- CI Environment Detected (e.g., GitHub Actions) ---
     Write-Host "[INFO] CI environment detected." -ForegroundColor Green
-
-    # Set PyInstaller to windowed mode for release
     $console_or_windowed_flag = "--windowed"
-
-    # Executable will have release name for CI builds
     $exe_name = "Beauty Center v. $exe_version"
 
-    # Use UPX path from workflow (must be set as env variable in CI YAML)
     if ($env:UPX_PATH)
     {
         Write-Host "[INFO] UPX found at '$env:UPX_PATH'. Compression will be enabled."
-        # Set UPX flag using GitHub Actions env variable
         $upx_flag = "--upx-dir=$env:UPX_PATH"
     }
     else
@@ -78,8 +70,8 @@ else
 }
 
 # --- PRE BUILD: CONVERT QT FILES TO PY ---
-Write-Host "`n[STEP 1/3] Running Converting script (convert_qt_files_to_py.ps1)..." -ForegroundColor Yellow
 $convert_script = Join-Path $ScriptPath "convert_qt_files_to_py.ps1"
+Write-Host "`n[STEP 1/3] Running Converting script (convert_qt_files_to_py.ps1)..." -ForegroundColor Yellow
 if (Test-Path  $convert_script)
 {
     &  $convert_script
@@ -162,9 +154,9 @@ $pyArgs = @(
     "--collect-submodules", "PySide6.QtNetwork",
     "--collect-submodules", "PySide6.QtUiTools",
     "--collect-submodules", "PySide6.QtWidgets",
-    "--add-data", "../ui/views${sep}ui/views",
+    "--add-data", "../src/beauty_center/ui/views${sep}src/beauty_center/ui/views",
     "--add-data", "../translations/generated_qm${sep}translations/generated_qm",
-    "--splash", "../resources/images/a350.png"
+    "--splash", "../src/beauty_center/resources/images/a350.png"
 )
 
 if ($upx_flag)
@@ -172,7 +164,7 @@ if ($upx_flag)
     $pyArgs += $upx_flag
 }
 
-$pyArgs += "main.py"
+$pyArgs += "src/beauty_center/main.py"
 
 Write-Host "`n[INFO] PyInstaller command (ready to launch):"
 Write-Host "pyinstaller $( $pyArgs -join ' ' )" -ForegroundColor Magenta
@@ -183,7 +175,7 @@ pyinstaller @pyArgs
 if ($LASTEXITCODE -eq 0)
 {
     Write-Host "[SUCCESS] Build completed successfully!" -ForegroundColor Green
-    Write-Host "[INFO] Check the /dist directory for your EXE."
+    Write-Host "[INFO] Check the /exe directory for your EXE."
 }
 else
 {
