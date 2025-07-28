@@ -30,7 +30,6 @@ jobs:
             libsm6 \
             libxext6 \
             libglu1-mesa \
-            libgl1-mesa-glx \
             libopengl0 \
             xvfb
 
