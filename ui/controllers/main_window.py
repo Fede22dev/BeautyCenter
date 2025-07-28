@@ -1,84 +1,55 @@
-from PySide6.QtWidgets import QMainWindow
+from PySide6.QtCore import QPropertyAnimation, QEasingCurve
+from PySide6.QtGui import QIcon
+from PySide6.QtWidgets import QMainWindow, QPushButton
 
 from ui.generated_ui.main_window import Ui_beauty_center_main_window
 
 
 class BeautyCenterMainWindow(QMainWindow):
+    ANIMATION_DURATION = 300
+
     def __init__(self):
         super().__init__()
 
         self.ui = Ui_beauty_center_main_window()
         self.ui.setupUi(self)
 
-        self.is_menu_expanded = False
+        self.sidebar_expanded = False
+        self.sidebar_collapsed_width = self.ui.sidebar.minimumWidth()
+        self.sidebar_expanded_width = self.ui.sidebar.maximumWidth()
 
-    # def _setup_ui(self):
-    #     """
-    #     Impostazioni iniziali dell'interfaccia dopo il caricamento.
-    #     """
-    #     # 2. Trova i widget tramite il loro objectName
-    #     # Assicurati che questi nomi corrispondano a quelli nel tuo file .ui
-    #     self.menu_frame = self.ui.findChild(QWidget, "menu_frame")
-    #     self.toggle_button = self.ui.findChild(QWidget, "toggle_button")
-    #
-    #     # Controlla se i widget sono stati trovati
-    #     if not all([self.menu_frame, self.toggle_button]):
-    #         raise ValueError("Errore: Uno o più widget non trovati nel file .ui."
-    #                          " Controlla gli objectName: 'menu_frame', 'toggle_button'")
-    #
-    #     # 3. Nascondi il menu all'avvio e imposta la visibilità dei suoi figli
-    #     self.ui.menu_frame.setFixedWidth(0)
-    #     self._update_menu_children_visibility(False)
-    #
-    #     # 4. Collega il click del bottone alla funzione (slot)
-    #     self.toggle_button.clicked.connect(self.toggle_menu)
-    #
-    # def _update_menu_children_visibility(self, visible):
-    #     """
-    #     Mostra o nasconde tutti i widget figli diretti del menu_frame.
-    #     Questo evita che siano visibili/interagibili quando il menu è chiuso.
-    #     """
-    #     for child in self.menu_frame.children():
-    #         # Controlliamo se è un widget prima di cambiare la visibilità
-    #         if isinstance(child, QWidget):
-    #             child.setVisible(visible)
-    #
-    # @Slot()
-    # def toggle_menu(self):
-    #     """
-    #     Espande o collassa il menu con un'animazione.
-    #     """
-    #     collapsed_width = 0
-    #     expanded_width = 200  # Larghezza del menu desiderata
-    #
-    #     if self.is_menu_expanded:
-    #         # COLLASSA IL MENU
-    #         start_width = expanded_width
-    #         end_width = collapsed_width
-    #         self.is_menu_expanded = False
-    #         # Nascondi i widget figli PRIMA di avviare l'animazione di chiusura
-    #         self._update_menu_children_visibility(False)
-    #     else:
-    #         # ESPANDI IL MENU
-    #         start_width = collapsed_width
-    #         end_width = expanded_width
-    #         self.is_menu_expanded = True
-    #         # Mostra i widget figli DOPO che l'animazione di apertura è finita
-    #         # Lo colleghiamo al segnale finished() dell'animazione
-    #
-    #     # Crea e configura l'animazione sulla larghezza del frame
-    #     self.animation = QPropertyAnimation(self.menu_frame, b"minimumWidth")
-    #     self.animation.setDuration(300)
-    #     self.animation.setStartValue(start_width)
-    #     self.animation.setEndValue(end_width)
-    #     self.animation.setEasingCurve(QEasingCurve.InOutQuart)
-    #
-    #     # Se stiamo espandendo, collega la funzione per mostrare i figli
-    #     if self.is_menu_expanded:
-    #         self.animation.finished.connect(lambda: self._update_menu_children_visibility(True))
-    #
-    #     self.animation.start()
-    #
-    # def show(self):
-    #     """Metodo helper per mostrare la finestra principale."""
-    #     self.ui.show()
+        self.sidebar_buttons = [btn for btn in self.ui.sidebar.findChildren(QPushButton) if
+                                btn is not self.ui.exp_col_sidebar_pb]
+
+        # Sidebar width animation setup
+        self.sidebar_animation = QPropertyAnimation(self.ui.sidebar, b"minimumWidth")
+        self.sidebar_animation.setDuration(self.ANIMATION_DURATION)
+        self.sidebar_animation.setEasingCurve(QEasingCurve.Type.InOutCubic)
+        self.sidebar_animation.finished.connect(self._on_animation_finished)
+
+        self.ui.exp_col_sidebar_pb.clicked.connect(self._toggle_sidebar)
+
+    def _on_animation_finished(self):
+        if self.sidebar_expanded:
+            self._update_sidebar_ui()
+
+    def _toggle_sidebar(self):
+        current_width = self.ui.sidebar.width()
+        target_width = self.sidebar_collapsed_width if self.sidebar_expanded else self.sidebar_expanded_width
+
+        self.sidebar_animation.stop()
+        self.sidebar_animation.setStartValue(current_width)
+        self.sidebar_animation.setEndValue(target_width)
+        self.sidebar_animation.start()
+
+        self.sidebar_expanded = not self.sidebar_expanded
+        if not self.sidebar_expanded:
+            self._update_sidebar_ui()
+
+    def _update_sidebar_ui(self):
+        icon_name = QIcon.ThemeIcon.GoPrevious if self.sidebar_expanded else QIcon.ThemeIcon.GoNext
+        self.ui.exp_col_sidebar_pb.setIcon(QIcon.fromTheme(icon_name))
+
+        for btn in self.sidebar_buttons:
+            full_text = btn.property("fullText") or ""
+            btn.setText(full_text if self.sidebar_expanded else "")

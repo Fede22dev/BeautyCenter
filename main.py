@@ -1,3 +1,4 @@
+import os
 import re
 import sys
 import time
@@ -12,7 +13,9 @@ from packaging import version
 from tqdm import tqdm
 
 from ui.controllers.main_window import BeautyCenterMainWindow
-from utilities.utilities import qFatal, get_desktop_path, get_resource_path
+from utilities.utilities import qFatal, get_desktop_path
+
+from resources.generated_qrc import styles_rc  # noqa: F401
 
 try:
     import pyi_splash
@@ -178,7 +181,7 @@ def _check_executable_name() -> None:
     _stop_and_run_new_exe(expected_path)
 
 
-def _check_connection_quality(max_latency_ms: int = 300) -> bool:
+def _check_connection_quality(max_latency_ms: int = 350) -> bool:
     try:
         url = "https://www.google.com/generate_204"
         start = time.time()
@@ -361,7 +364,7 @@ def main() -> int:
     locale = QLocale.system()
     translator = QTranslator()
     if locale.language() == QLocale.Language.Italian:
-        if translator.load("translations/it.qm"):
+        if translator.load("it.qm", "translations/generated_qm"):
             app.installTranslator(translator)
             message = QCoreApplication.translate("main", "Loaded Italian translation.")
             qDebug(f"{_ID_TAG} {message}")
@@ -431,15 +434,16 @@ def main() -> int:
 
     _start_local_server(server_name)
 
-    file = QFile(get_resource_path("resources/styles/style.qss"))
+    file = QFile(":/styles/modern_pink")
     if file.open(QIODeviceBase.OpenModeFlag.ReadOnly):
         stream = QTextStream(file)
         app.setStyleSheet(stream.readAll())
 
-        message = QCoreApplication.translate("main", "Loaded style.qss")
+        message = QCoreApplication.translate("main", "Loaded style {file_name}").format(file_name=file.fileName())
         qDebug(f"{_ID_TAG} {message}")
     else:
-        message = QCoreApplication.translate("main", "Failed to load style.qss")
+        message = QCoreApplication.translate("main", "Failed to load style {file_name}").format(
+            file_name=file.fileName())
         qWarning(f"{_ID_TAG} {message}")
 
     file.close()

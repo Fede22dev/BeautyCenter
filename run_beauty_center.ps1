@@ -1,0 +1,29 @@
+Write-Host ""
+Write-Host "==== [STEP 1] Convert UI files ====" -ForegroundColor Cyan
+.\convert_ui_file_to_py.ps1
+if (-not $?)
+{
+    Write-Host "[FATAL] UI conversion failed!" -ForegroundColor Red
+    exit 1
+}
+
+Write-Host ""
+Write-Host "==== [STEP 2] Generate/Sync Translations ====" -ForegroundColor Cyan
+.\generate_translations.ps1
+if (-not $?)
+{
+    Write-Host "[FATAL] Translation generation failed!" -ForegroundColor Red
+    exit 1
+}
+
+Write-Host ""
+Write-Host "==== [STEP 3] Run main.py ====" -ForegroundColor Cyan
+.\.venv\Scripts\python.exe main.py
+if (-not $?)
+{
+    Write-Host "[FATAL] main.py failed!" -ForegroundColor Red
+    exit 1
+}
+
+Write-Host ""
+Write-Host "==== ALL STEPS COMPLETED SUCCESSFULLY ====" -ForegroundColor Green

@@ -69,11 +69,11 @@ else
     }
 }
 
-# --- PRE BUILD: CONVERT UI TO PY ---
-Write-Host "`n[STEP] Running Converting script (convert_ui_file_to_py.ps1)..." -ForegroundColor Yellow
-if (Test-Path ".\convert_ui_file_to_py.ps1")
+# --- PRE BUILD: CONVERT QT FILES TO PY ---
+Write-Host "`n[STEP 1/3] Running Converting script (convert_qt_files_to_py.ps1)..." -ForegroundColor Yellow
+if (Test-Path ".\convert_qt_files_to_py.ps1")
 {
-    & ".\convert_ui_file_to_py.ps1"
+    & ".\convert_qt_files_to_py.ps1"
     if (-not $?)
     {
         Write-Error "[FATAL] Converting script failed! Aborting build."; exit 1
@@ -85,11 +85,11 @@ if (Test-Path ".\convert_ui_file_to_py.ps1")
 }
 else
 {
-    Write-Warning "[WARN] convert_ui_file_to_py.ps1 NOT FOUND. Converting will NOT be done!"
+    Write-Warning "[WARN] convert_qt_files_to_py.ps1 NOT FOUND. Converting will NOT be done!"
 }
 
 # --- PRE BUILD: GENERATE AND UPDATE TRANSLATIONS ---
-Write-Host "`n[STEP] Running translation script (generate_translations.ps1)..." -ForegroundColor Yellow
+Write-Host "`n[STEP 2/3] Running translation script (generate_translations.ps1)..." -ForegroundColor Yellow
 if (Test-Path ".\generate_translations.ps1")
 {
     & ".\generate_translations.ps1"
@@ -107,24 +107,41 @@ else
     Write-Warning "[WARN] generate_translations.ps1 NOT FOUND. Translations will NOT be updated!"
 }
 
+# --- CLEAN FILES OLD BUILD ---
+Write-Host ""
+Write-Host "[STEP 3/4] Cleaning old files build..." -ForegroundColor Yellow
+Remove-Item "dist" -Recurse -ErrorAction SilentlyContinue
+Remove-Item "build" -Recurse -ErrorAction SilentlyContinue
+Remove-Item "$exe_name.spec" -ErrorAction SilentlyContinue
+
 # --- BUILD FINAL EXE ---
-Write-Host "`n[STEP] Building EXE..."
+Write-Host "`n[STEP 4/4] Building EXE..."
 Write-Host "      Name: $exe_name"
 Write-Host "      Version: $exe_version"
 Write-Host "      Console/Window: $console_or_windowed_flag"
 Write-Host "      UPX: $upx_flag"
 
+$sep = if ($IsWindows)
+{
+    ";"
+}
+else
+{
+    ":"
+}
+
 $pyArgs = @(
     "--onefile",
+    "--clean",
+    "--noconfirm",
     $console_or_windowed_flag,
     "--name", "$exe_name",
     "--collect-submodules", "PySide6.QtCore",
     "--collect-submodules", "PySide6.QtNetwork",
     "--collect-submodules", "PySide6.QtUiTools",
     "--collect-submodules", "PySide6.QtWidgets",
-    "--add-data", "ui/views;ui/views",
-    "--add-data", "translations/it.qm;translations",
-    "--add-data", "resources/styles;resources/styles",
+    "--add-data", "ui/views${sep}ui/views",
+    "--add-data", "translations/generated_qm${sep}translations/generated_qm",
     "--splash", "resources/images/a350.png"
 )
 
@@ -137,7 +154,7 @@ $pyArgs += "main.py"
 
 Write-Host "`n[INFO] PyInstaller command (ready to launch):"
 Write-Host "pyinstaller $( $pyArgs -join ' ' )" -ForegroundColor Magenta
-Write-Host "[STEP] Executing PyInstaller build..." -ForegroundColor Yellow
+Write-Host "[STEP 4/4] Executing PyInstaller build..." -ForegroundColor Yellow
 
 pyinstaller @pyArgs
 

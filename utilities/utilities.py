@@ -17,6 +17,7 @@ def get_desktop_path() -> str:
 
     return QDir.toNativeSeparators(desktop)
 
+
 # Custom qFatal, in python don't work like c++ and not print message error before exit
 def qFatal(message: str):
     time_str = QTime.currentTime().toString("HH:mm:ss")

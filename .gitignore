@@ -37,7 +37,6 @@ env/
 # -------------------------------
 *.qrc.py
 *.ui.py
-*.qrc
 *.qmlc
 *.jsc
 *.moc
@@ -46,6 +45,8 @@ moc_*.cpp
 qrc_*.cpp
 ui_*.h
 /ui/generated_ui/
+/resources/generated_qrc/
+/translations/generated_qm/
 # These are generated files from Qt tools (e.g., `pyside6-uic`, `pyrcc`) — no need to version them.
 
 # -------------------------------

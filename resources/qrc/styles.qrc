@@ -1,0 +1,6 @@
+<!DOCTYPE RCC>
+<RCC>
+    <qresource prefix="/styles">
+        <file alias="modern_pink">../styles/modern_pink.qss</file>
+    </qresource>
+</RCC>
