@@ -11,6 +11,9 @@ jobs:
   bandit:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+
     strategy:
       matrix:
         python-version: ["3.13"]

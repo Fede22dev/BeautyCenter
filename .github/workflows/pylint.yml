@@ -10,11 +10,14 @@ on:
 jobs:
   lint:
     runs-on: ubuntu-latest
+
     permissions:
       contents: read
+
     strategy:
       matrix:
         python-version: ["3.13"]
+
     steps:
       - uses: actions/checkout@v4
 
