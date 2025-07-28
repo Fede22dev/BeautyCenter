@@ -139,4 +139,4 @@ jobs:
             Version: ${{ env.APP_VERSION }}
             Commit: ${{ github.sha }}
           files: |
-            dist/${{ env.APP_NAME }} v. ${{ env.APP_VERSION }}.exe
+            exe/${{ env.APP_NAME }} v. ${{ env.APP_VERSION }}.exe
