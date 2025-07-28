@@ -1,7 +1,13 @@
 Write-Host ""
 Write-Host "==================== QT TRANSLATION AUTO-SYNC SCRIPT ====================" -ForegroundColor Yellow
 
-$ProjectRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
+# [INFO] Get script *real* root (.. up from scripts/)
+$ScriptPath  = $PSScriptRoot
+$ProjectRoot = Split-Path $ScriptPath -Parent
+
+Write-Host "[INFO] Script dir   : $ScriptPath"
+Write-Host "[INFO] Project root : $ProjectRoot"
+
 $VenvScripts = Join-Path $ProjectRoot ".venv\Scripts"
 
 if (-not (Test-Path $VenvScripts))

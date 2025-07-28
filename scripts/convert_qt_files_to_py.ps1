@@ -4,15 +4,16 @@ Write-Host "==================== QT CONVERT UI TO PY + QRC ===================="
 # [STEP 1/6] Get script root and define dirs
 Write-Host "[STEP 1/6] Setting paths..." -ForegroundColor Magenta
 
-$scriptPath = $PSScriptRoot
+$ScriptPath  = $PSScriptRoot
+$ProjectRoot = Split-Path $ScriptPath -Parent
 
-$inputDir = Join-Path $scriptPath "ui" "views"
-$outputDir = Join-Path $scriptPath "ui" "generated_ui"
-$resourcesDir = Join-Path $scriptPath "resources"
-$qrcDir = Join-Path $resourcesDir "qrc"
-$iconsQrc = Join-Path $qrcDir "icons.qrc"
-$imagesQrc = Join-Path $qrcDir "images.qrc"
-$stylesQrc = Join-Path $qrcDir "styles.qrc"
+$inputDir        = Join-Path $ProjectRoot "ui" "views"
+$outputDir       = Join-Path $ProjectRoot "ui" "generated_ui"
+$resourcesDir    = Join-Path $ProjectRoot "resources"
+$qrcDir          = Join-Path $resourcesDir "qrc"
+$iconsQrc        = Join-Path $qrcDir "icons.qrc"
+$imagesQrc       = Join-Path $qrcDir "images.qrc"
+$stylesQrc       = Join-Path $qrcDir "styles.qrc"
 $generatedQrcDir = Join-Path $resourcesDir "generated_qrc"
 
 # [STEP 2/6] Ensure output directories exist
@@ -59,12 +60,12 @@ Write-Host "[STEP 4/6] Searching for pyside6-uic and pyside6-rcc..." -Foreground
 $uicCommand = ""
 $rccCommand = ""
 
-$venvScriptsWin = Join-Path $scriptPath ".venv" "Scripts"
-$venvBinNix = Join-Path $scriptPath ".venv" "bin"
-$uicInVenvWin = Join-Path $venvScriptsWin "pyside6-uic.exe"
-$uicInVenvNix = Join-Path $venvBinNix "pyside6-uic"
-$rccInVenvWin = Join-Path $venvScriptsWin "pyside6-rcc.exe"
-$rccInVenvNix = Join-Path $venvBinNix "pyside6-rcc"
+$venvScriptsWin = Join-Path $ProjectRoot ".venv" "Scripts"
+$venvBinNix     = Join-Path $ProjectRoot ".venv" "bin"
+$uicInVenvWin   = Join-Path $venvScriptsWin "pyside6-uic.exe"
+$uicInVenvNix   = Join-Path $venvBinNix "pyside6-uic"
+$rccInVenvWin   = Join-Path $venvScriptsWin "pyside6-rcc.exe"
+$rccInVenvNix   = Join-Path $venvBinNix "pyside6-rcc"
 
 if (Test-Path $uicInVenvWin)
 {

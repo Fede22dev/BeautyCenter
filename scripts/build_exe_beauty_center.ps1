@@ -1,13 +1,20 @@
+Write-Host ""
+Write-Host "=== [AUTO-BUILD SCRIPT] ===" -ForegroundColor Cyan
+
 # --- SMART ENVIRONMENT & FLAGS LOGIC ---
+
+$ScriptPath = $PSScriptRoot
+$ProjectRoot = Split-Path $ScriptPath -Parent
+$exeDir = Join-Path $ProjectRoot "exe"
+
+$name_version_file = Join-Path $ProjectRoot "name_version.py"
+$version_line = Get-Content $name_version_file | Where-Object { $_ -match 'APP_VERSION' }
+$exe_version = ($version_line -split '=')[1].Trim().Trim("'").Trim('"')
+
 $console_or_windowed_flag = ""
 $exe_name = ""
-$exe_version = ""
 $upx_flag = ""
 
-Write-Host "=== [AUTO-BUILD SCRIPT] v.1.1 ===" -ForegroundColor Cyan
-
-$version_line = Get-Content ".\name_version.py" | Where-Object { $_ -match 'APP_VERSION' }
-$exe_version = ($version_line -split '=')[1].Trim().Trim("'").Trim('"')
 
 if ($env:CI -ne 'true')
 {
@@ -15,7 +22,7 @@ if ($env:CI -ne 'true')
     Write-Host "[INFO] Local build detected." -ForegroundColor Green
 
     # Activate the Python virtual environment
-    $activate_script = ".\.venv\Scripts\activate.ps1"
+    $activate_script = Join-Path $ProjectRoot ".venv\Scripts\activate.ps1"
     if (Test-Path $activate_script)
     {
         Write-Host "[INFO] Activating virtualenv..."
@@ -23,7 +30,8 @@ if ($env:CI -ne 'true')
     }
     else
     {
-        Write-Error "[FATAL] Venv not found! Exiting build."; exit 1
+        Write-Error "[FATAL] Venv not found! Exiting build.";
+        exit 1
     }
 
     # Set flag for local debug mode (console)
@@ -71,12 +79,14 @@ else
 
 # --- PRE BUILD: CONVERT QT FILES TO PY ---
 Write-Host "`n[STEP 1/3] Running Converting script (convert_qt_files_to_py.ps1)..." -ForegroundColor Yellow
-if (Test-Path ".\convert_qt_files_to_py.ps1")
+$convert_script = Join-Path $ScriptPath "convert_qt_files_to_py.ps1"
+if (Test-Path  $convert_script)
 {
-    & ".\convert_qt_files_to_py.ps1"
+    &  $convert_script
     if (-not $?)
     {
-        Write-Error "[FATAL] Converting script failed! Aborting build."; exit 1
+        Write-Error "[FATAL] Converting script failed! Aborting build.";
+        exit 1
     }
     else
     {
@@ -90,12 +100,14 @@ else
 
 # --- PRE BUILD: GENERATE AND UPDATE TRANSLATIONS ---
 Write-Host "`n[STEP 2/3] Running translation script (generate_translations.ps1)..." -ForegroundColor Yellow
-if (Test-Path ".\generate_translations.ps1")
+$translation_script = Join-Path $ScriptPath "generate_translations.ps1"
+if (Test-Path $translation_script)
 {
-    & ".\generate_translations.ps1"
+    & $translation_script
     if (-not $?)
     {
-        Write-Error "[FATAL] Translation script failed! Aborting build."; exit 1
+        Write-Error "[FATAL] Translation script failed! Aborting build.";
+        exit 1
     }
     else
     {
@@ -107,19 +119,26 @@ else
     Write-Warning "[WARN] generate_translations.ps1 NOT FOUND. Translations will NOT be updated!"
 }
 
-# --- CLEAN FILES OLD BUILD ---
+# --- CLEAN OLD FILES ONLY IN exe/ ---
 Write-Host ""
-Write-Host "[STEP 3/4] Cleaning old files build..." -ForegroundColor Yellow
-Remove-Item "dist" -Recurse -ErrorAction SilentlyContinue
-Remove-Item "build" -Recurse -ErrorAction SilentlyContinue
-Remove-Item "$exe_name.spec" -ErrorAction SilentlyContinue
+Write-Host "[STEP 3/4] Cleaning old build files in /exe..." -ForegroundColor Yellow
+if (Test-Path $exeDir)
+{
+    Remove-Item "$exeDir\*" -Recurse -ErrorAction SilentlyContinue
+}
+else
+{
+    New-Item -ItemType Directory -Path $exeDir | Out-Null
+}
 
 # --- BUILD FINAL EXE ---
-Write-Host "`n[STEP 4/4] Building EXE..."
-Write-Host "      Name: $exe_name"
-Write-Host "      Version: $exe_version"
+Set-Location $ProjectRoot
+
+Write-Host "      Name:     $exe_name"
+Write-Host "      Version:  $exe_version"
+Write-Host "      Out dir:  $exeDir"
 Write-Host "      Console/Window: $console_or_windowed_flag"
-Write-Host "      UPX: $upx_flag"
+Write-Host "      UPX:      $upx_flag"
 
 $sep = if ($IsWindows)
 {
@@ -134,15 +153,18 @@ $pyArgs = @(
     "--onefile",
     "--clean",
     "--noconfirm",
+    "--distpath", $exeDir,
+    "--workpath", (Join-Path $exeDir "build"),
+    "--specpath", $exeDir,
     $console_or_windowed_flag,
     "--name", "$exe_name",
     "--collect-submodules", "PySide6.QtCore",
     "--collect-submodules", "PySide6.QtNetwork",
     "--collect-submodules", "PySide6.QtUiTools",
     "--collect-submodules", "PySide6.QtWidgets",
-    "--add-data", "ui/views${sep}ui/views",
-    "--add-data", "translations/generated_qm${sep}translations/generated_qm",
-    "--splash", "resources/images/a350.png"
+    "--add-data", "../ui/views${sep}ui/views",
+    "--add-data", "../translations/generated_qm${sep}translations/generated_qm",
+    "--splash", "../resources/images/a350.png"
 )
 
 if ($upx_flag)

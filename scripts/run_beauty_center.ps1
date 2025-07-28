@@ -1,9 +1,9 @@
 Write-Host ""
-Write-Host "==== [STEP 1] Convert UI files ====" -ForegroundColor Cyan
-.\convert_ui_file_to_py.ps1
+Write-Host "==== [STEP 1] Convert QT files ====" -ForegroundColor Cyan
+.\convert_qt_files_to_py.ps1
 if (-not $?)
 {
-    Write-Host "[FATAL] UI conversion failed!" -ForegroundColor Red
+    Write-Host "[FATAL] QT files conversion failed!" -ForegroundColor Red
     exit 1
 }
 
@@ -18,7 +18,7 @@ if (-not $?)
 
 Write-Host ""
 Write-Host "==== [STEP 3] Run main.py ====" -ForegroundColor Cyan
-.\.venv\Scripts\python.exe main.py
+..\.venv\Scripts\python.exe ../main.py
 if (-not $?)
 {
     Write-Host "[FATAL] main.py failed!" -ForegroundColor Red

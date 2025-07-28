@@ -92,7 +92,7 @@ jobs:
             exit 1
           }
          
-          ./build_exe_beauty_center.ps1
+          ./scripts/build_exe_beauty_center.ps1
         shell: pwsh
 
       - name: Delete previous release and tag (if present)
