@@ -42,93 +42,93 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="../src/beauty_center/main.py" line="32"/>
+        <location filename="../src/beauty_center/main.py" line="33"/>
         <source>DEBUG</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="33"/>
+        <location filename="../src/beauty_center/main.py" line="34"/>
         <source>INFO</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="34"/>
+        <location filename="../src/beauty_center/main.py" line="35"/>
         <source>WARNING</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="35"/>
+        <location filename="../src/beauty_center/main.py" line="36"/>
         <source>CRITICAL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="36"/>
+        <location filename="../src/beauty_center/main.py" line="37"/>
         <source>FATAL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="39"/>
+        <location filename="../src/beauty_center/main.py" line="40"/>
         <source>UNKNOWN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="59"/>
+        <location filename="../src/beauty_center/main.py" line="60"/>
         <source>Deleted old executable: {old_path}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="66"/>
+        <location filename="../src/beauty_center/main.py" line="67"/>
         <source>Old executable not found: {old_path}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="71"/>
+        <location filename="../src/beauty_center/main.py" line="72"/>
         <source>Failed to delete old executable: {old_path}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="85"/>
-        <location filename="../src/beauty_center/main.py" line="116"/>
-        <location filename="../src/beauty_center/main.py" line="334"/>
-        <location filename="../src/beauty_center/main.py" line="396"/>
-        <location filename="../src/beauty_center/main.py" line="427"/>
+        <location filename="../src/beauty_center/main.py" line="86"/>
+        <location filename="../src/beauty_center/main.py" line="117"/>
+        <location filename="../src/beauty_center/main.py" line="335"/>
+        <location filename="../src/beauty_center/main.py" line="398"/>
+        <location filename="../src/beauty_center/main.py" line="429"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="85"/>
+        <location filename="../src/beauty_center/main.py" line="86"/>
         <source>Failed to copy new executable:
 {source_path}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="91"/>
+        <location filename="../src/beauty_center/main.py" line="92"/>
         <source>Copied new executable: {target_path}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="107"/>
+        <location filename="../src/beauty_center/main.py" line="108"/>
         <source>Stopped and running new executable: {exe_path}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="116"/>
+        <location filename="../src/beauty_center/main.py" line="117"/>
         <source>Failed to stop and run new executable:
 {exe_path}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="131"/>
+        <location filename="../src/beauty_center/main.py" line="132"/>
         <source>Executable path is correct: {current_exe_path}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="140"/>
+        <location filename="../src/beauty_center/main.py" line="141"/>
         <source>Incorrect Executable Path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="141"/>
+        <location filename="../src/beauty_center/main.py" line="142"/>
         <source>The executable has been moved in other dir:
 Expected: {expected_path}
 Found: {current_exe_path}
@@ -137,17 +137,17 @@ The correct path will now be restored.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="161"/>
+        <location filename="../src/beauty_center/main.py" line="162"/>
         <source>Executable name is correct: {current_name}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="170"/>
+        <location filename="../src/beauty_center/main.py" line="171"/>
         <source>Incorrect Executable Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="171"/>
+        <location filename="../src/beauty_center/main.py" line="172"/>
         <source>The executable has been renamed:
 Expected: {expected_name}
 Found: {current_name}
@@ -156,37 +156,37 @@ The correct name will now be restored.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="189"/>
+        <location filename="../src/beauty_center/main.py" line="190"/>
         <source>Connection quality is good: {latency} ms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="195"/>
+        <location filename="../src/beauty_center/main.py" line="196"/>
         <source>Connection quality is bad, unable to check new version: {latency} ms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="201"/>
+        <location filename="../src/beauty_center/main.py" line="202"/>
         <source>Failed to check connection quality, unable to check new version: {exception}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="217"/>
+        <location filename="../src/beauty_center/main.py" line="218"/>
         <source>Failed to check for latest release: {api_url} Error: {exception}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="238"/>
+        <location filename="../src/beauty_center/main.py" line="239"/>
         <source>No new version found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="245"/>
+        <location filename="../src/beauty_center/main.py" line="246"/>
         <source>New Version Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="247"/>
+        <location filename="../src/beauty_center/main.py" line="248"/>
         <source>A new version is available:
 Local version: {curr_ver}
 Remote version: {latest_ver}
@@ -195,77 +195,77 @@ Download now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="253"/>
+        <location filename="../src/beauty_center/main.py" line="254"/>
         <source>Download cancelled.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="257"/>
+        <location filename="../src/beauty_center/main.py" line="258"/>
         <source>Downloading latest version...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="268"/>
+        <location filename="../src/beauty_center/main.py" line="269"/>
         <source>Failed to get download URL for latest release.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="273"/>
+        <location filename="../src/beauty_center/main.py" line="274"/>
         <source>Downloading latest version {display_name} from ({download_url})</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="283"/>
+        <location filename="../src/beauty_center/main.py" line="284"/>
         <source>Downloading latest version {display_name} to ({out_path})</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="305"/>
+        <location filename="../src/beauty_center/main.py" line="306"/>
         <source>Failed to download latest version:
 {exception}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="312"/>
+        <location filename="../src/beauty_center/main.py" line="313"/>
         <source>Downloaded latest version {display_name} to ({out_path})</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="335"/>
+        <location filename="../src/beauty_center/main.py" line="336"/>
         <source>Failed to start local server:
 {instance_server_name}
 Error: {error}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="368"/>
+        <location filename="../src/beauty_center/main.py" line="370"/>
         <source>Loaded Italian translation.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="372"/>
+        <location filename="../src/beauty_center/main.py" line="374"/>
         <source>Italian translation not found. Use default English translation.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="397"/>
+        <location filename="../src/beauty_center/main.py" line="399"/>
         <source>Unexpected positional argument(s) found:
 {positional_args}.
 Use --help or -h for usage information.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="427"/>
+        <location filename="../src/beauty_center/main.py" line="429"/>
         <source>Another instance of {app_name} is already running.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="440"/>
+        <location filename="../src/beauty_center/main.py" line="442"/>
         <source>Loaded style {file_name}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="443"/>
+        <location filename="../src/beauty_center/main.py" line="445"/>
         <source>Failed to load style {file_name}</source>
         <translation type="unfinished"></translation>
     </message>

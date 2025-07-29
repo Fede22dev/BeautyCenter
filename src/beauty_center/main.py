@@ -6,13 +6,14 @@ import requests
 from PySide6.QtCore import QFile, QIODeviceBase, qWarning, qDebug, QtMsgType, QTime, QLoggingCategory, \
     qInstallMessageHandler, QCommandLineOption, QCommandLineParser, qInfo, Qt, QCoreApplication, QLocale, QTranslator, \
     qCritical, QThread, QDir, QProcess, QFileInfo, QTextStream
+from PySide6.QtGui import QIcon
 from PySide6.QtNetwork import QLocalServer, QLocalSocket
 from PySide6.QtWidgets import QApplication, QMessageBox, QProgressDialog
 from packaging import version
+from resources.generated_qrc import icons_rc, styles_rc  # noqa: F401
 from tqdm import tqdm
 
 from name_version import APP_VERSION, APP_NAME, GITHUB_REPO_NAME
-from resources.generated_qrc import styles_rc  # noqa: F401
 from ui.controllers.main_window import BeautyCenterMainWindow
 from utilities.utilities import qFatal, get_desktop_path, get_resource_path
 
@@ -357,6 +358,7 @@ def main() -> int:
     app = QApplication(sys.argv)
     app.setApplicationName(APP_NAME)
     app.setApplicationVersion(APP_VERSION)
+    app.setWindowIcon(QIcon(":/icons/windows_icon"))
 
     locale = QLocale.system()
     translator = QTranslator()

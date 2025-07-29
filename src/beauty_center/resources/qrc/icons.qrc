@@ -1,6 +1,7 @@
 <!DOCTYPE RCC>
 <RCC>
     <qresource prefix="/icons">
+        <file alias="windows_icon">../icons/windows_icon.ico</file>
         <file alias="menu_close">../icons/menu_close.svg</file>
         <file alias="menu_open">../icons/menu_open.svg</file>
     </qresource>
