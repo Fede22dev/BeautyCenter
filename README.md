@@ -53,4 +53,4 @@ pip install -r requirements.txt
 
 ## Author
 
-Made with ❤️ by [Fede22](https://github.com/Fede22dev)
+Made with ❤️ by [Fede22dev](https://github.com/Fede22dev)

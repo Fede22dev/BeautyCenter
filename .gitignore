@@ -40,6 +40,11 @@ env/
 moc_*.cpp
 qrc_*.cpp
 ui_*.h
+# These are generated files from Qt tools (e.g., `pyside6-uic`, `pyrcc`) — no need to version them.
+
+# -------------------------------
+# My Qt / PySide / PyQt generated files
+# -------------------------------
 src/beauty_center/ui/generated_ui/
 src/beauty_center/resources/generated_qrc/
 translations/generated_qm/
@@ -54,6 +59,7 @@ translations/generated_qm/
 exe/
 dist/
 build/
+# These are generated files from PyInstaler tool — no need to version them.
 
 # -------------------------------
 # PyCharm project files
