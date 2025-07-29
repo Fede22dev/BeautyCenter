@@ -46,39 +46,8 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install pylint pylint-exit anybadge
+          pip install pylint
 
-      - name: Create reports directory
-        run: mkdir -p reports
-
-      - name: Run Pylint with detailed output
+      - name: Run Pylint
         run: |
-          pylint src/ --output-format=text --reports=yes --score=yes > reports/pylint-report.txt || true
-          pylint src/ --output-format=json > reports/pylint-report.json || true
-          PYLINT_SCORE=$(pylint src/ --score=yes | grep "Your code has been rated" | cut -d' ' -f7 | cut -d'/' -f1)
-          echo "PYLINT_SCORE=$PYLINT_SCORE" >> $GITHUB_ENV
-            
-          anybadge --label=Pylint --value=$PYLINT_SCORE --file=reports/pylint-badge.svg --color=green
-
-      - name: Upload Pylint Reports
-        uses: actions/upload-artifact@v4
-        with:
-          name: pylint-reports
-          path: reports/
-          retention-days: 30
-
-      - name: Comment PR with Pylint Score
-        if: github.event_name == 'pull_request'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const fs = require('fs');
-            const report = fs.readFileSync('reports/pylint-report.txt', 'utf8');
-            const score = process.env.PYLINT_SCORE;
-              
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: `## 📊 Pylint Score: ${score}/10\n\n<details><summary>View detailed report</summary>\n\n\`\`\`\n${report.slice(0, 2000)}\n\`\`\`\n</details>`
-            });
+          pylint $(git ls-files '*.py') || exit 0

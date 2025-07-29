@@ -15,7 +15,6 @@ jobs:
 
     permissions:
       contents: read
-      security-events: write  # SARIF upload
       pull-requests: write
 
     strategy:
@@ -45,39 +44,10 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install Bandit and dependencies
+      - name: Upgrade pip and install Bandit
         run: |
           python -m pip install --upgrade pip
-          pip install bandit[toml] safety
+          pip install bandit
 
-      - name: Create reports directory
-        run: mkdir -p reports
-
-      - name: Run Bandit Security Scan
-        run: |
-          bandit -r src/ -ll -f json -o reports/bandit-report.json || true
-          bandit -r src/ -ll -f txt -o reports/bandit-report.txt || true
-          bandit -r src/ -ll -f sarif -o reports/bandit-report.sarif || true
-
-      - name: Run Safety check for dependencies
-        run: |
-          safety check --json --output reports/safety-report.json || true
-          safety check --output reports/safety-report.txt || true
-
-      - name: Upload SARIF file to GitHub Security
-        if: always()
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: reports/bandit-report.sarif
-
-      - name: Upload Security Reports
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: security-reports
-          path: reports/
-          retention-days: 90  # Security reports kept longer
-
-      - name: Fail on high severity issues
-        run: |
-          bandit -r src/ -ll --severity-level high --exit-zero || exit 1
+      - name: Run Bandit security scan
+        run: bandit -r . -ll

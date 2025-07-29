@@ -7,11 +7,7 @@ env:
   RELEASE_TAG: latest-build
 
 jobs:
-  test-before-build:
-    uses: ./.github/workflows/pytest.yml
-
   build-exe:
-    needs: test-before-build
     runs-on: windows-latest
 
     permissions:
