@@ -184,6 +184,6 @@ jobs:
           generate_release_notes: true
 
       - name: Generate attestation
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v2
         with:
           subject-path: 'exe/${{ env.APP_NAME }} v. ${{ env.APP_VERSION }}.exe'
