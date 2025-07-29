@@ -138,6 +138,9 @@ else
 }
 
 # --- BUILD FINAL EXE ---
+Write-Host ""
+Write-Host "[STEP 4/4] Executing PyInstaller build..." -ForegroundColor Yellow
+
 Set-Location $ProjectRoot
 
 Write-Host "      Name:     $exe_name"
@@ -181,11 +184,8 @@ if ($upx_flag)
 $pyArgs += "src/beauty_center/main.py"
 
 Write-Host ""
-Write-Host "`n[INFO] PyInstaller command (ready to launch):"
+Write-Host "[INFO] PyInstaller command (ready to launch):"
 Write-Host "pyinstaller $( $pyArgs -join ' ' )" -ForegroundColor Magenta
-
-Write-Host ""
-Write-Host "[STEP 4/4] Executing PyInstaller build..." -ForegroundColor Yellow
 
 pyinstaller @pyArgs
 

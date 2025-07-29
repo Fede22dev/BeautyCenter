@@ -1,10 +1,11 @@
-name: Pylint
+name: Code Quality (Pylint)
 
 on:
   push:
     paths:
       - '**.py'
       - '.github/workflows/pylint.yml'
+      - 'requirements.txt'
   pull_request:
 
 jobs:
@@ -13,20 +14,27 @@ jobs:
 
     permissions:
       contents: read
+      pull-requests: write
 
     strategy:
       matrix:
         python-version: ["3.13"]
 
     steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@v2
+        with:
+          egress-policy: audit
+
       - uses: actions/checkout@v4
 
       - name: Cache pip
         uses: actions/cache@v4
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          key: ${{ runner.os }}-pip-pylint-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
+            ${{ runner.os }}-pip-pylint-
             ${{ runner.os }}-pip-
 
       - name: Set up Python ${{ matrix.python-version }}
@@ -37,8 +45,40 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pylint
+          pip install -r requirements.txt
+          pip install pylint pylint-exit anybadge
 
-      - name: Run Pylint
+      - name: Create reports directory
+        run: mkdir -p reports
+
+      - name: Run Pylint with detailed output
         run: |
-          pylint $(git ls-files '*.py') || exit 0
+          pylint src/ --output-format=text --reports=yes --score=yes > reports/pylint-report.txt || true
+          pylint src/ --output-format=json > reports/pylint-report.json || true
+          PYLINT_SCORE=$(pylint src/ --score=yes | grep "Your code has been rated" | cut -d' ' -f7 | cut -d'/' -f1)
+          echo "PYLINT_SCORE=$PYLINT_SCORE" >> $GITHUB_ENV
+            
+          anybadge --label=Pylint --value=$PYLINT_SCORE --file=reports/pylint-badge.svg --color=green
+
+      - name: Upload Pylint Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: pylint-reports
+          path: reports/
+          retention-days: 30
+
+      - name: Comment PR with Pylint Score
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const report = fs.readFileSync('reports/pylint-report.txt', 'utf8');
+            const score = process.env.PYLINT_SCORE;
+              
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## 📊 Pylint Score: ${score}/10\n\n<details><summary>View detailed report</summary>\n\n\`\`\`\n${report.slice(0, 2000)}\n\`\`\`\n</details>`
+            });

@@ -1,4 +1,4 @@
-name: Bandit Security Scan
+name: Security Scan (Bandit)
 
 on:
   push:
@@ -6,6 +6,8 @@ on:
       - '**.py'
       - '.github/workflows/bandit.yml'
   pull_request:
+  schedule:
+    - cron: '0 2 * * 1'  # Weekly scan
 
 jobs:
   bandit:
@@ -13,12 +15,19 @@ jobs:
 
     permissions:
       contents: read
+      security-events: write  # SARIF upload
+      pull-requests: write
 
     strategy:
       matrix:
         python-version: ["3.13"]
 
     steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@v2
+        with:
+          egress-policy: audit
+
       - name: Checkout repo
         uses: actions/checkout@v4
 
@@ -26,8 +35,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          key: ${{ runner.os }}-pip-bandit-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
+            ${{ runner.os }}-pip-bandit-
             ${{ runner.os }}-pip-
 
       - name: Set up Python ${{ matrix.python-version }}
@@ -35,10 +45,39 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Upgrade pip and install Bandit
+      - name: Install Bandit and dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install bandit
+          pip install bandit[toml] safety
 
-      - name: Run Bandit security scan
-        run: bandit -r . -ll
+      - name: Create reports directory
+        run: mkdir -p reports
+
+      - name: Run Bandit Security Scan
+        run: |
+          bandit -r src/ -ll -f json -o reports/bandit-report.json || true
+          bandit -r src/ -ll -f txt -o reports/bandit-report.txt || true
+          bandit -r src/ -ll -f sarif -o reports/bandit-report.sarif || true
+
+      - name: Run Safety check for dependencies
+        run: |
+          safety check --json --output reports/safety-report.json || true
+          safety check --output reports/safety-report.txt || true
+
+      - name: Upload SARIF file to GitHub Security
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: reports/bandit-report.sarif
+
+      - name: Upload Security Reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: security-reports
+          path: reports/
+          retention-days: 90  # Security reports kept longer
+
+      - name: Fail on high severity issues
+        run: |
+          bandit -r src/ -ll --severity-level high --exit-zero || exit 1
