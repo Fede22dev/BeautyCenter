@@ -108,6 +108,7 @@ jobs:
         with:
           path: ./exe/
           format: spdx-json
+          output-file: sbom.json
 
       - name: Sign executable (if certificate available)
         if: env.SIGNING_CERT != ''
@@ -159,21 +160,29 @@ jobs:
           tag_name: ${{ env.RELEASE_TAG }}
           name: ${{ env.APP_NAME }} v. ${{ env.APP_VERSION }}
           body: |
-            ## 🚀 Latest Development Build
+            ## 🚀 Latest Build – ${{ env.APP_NAME }} v${{ env.APP_VERSION }}
             
-            **Version:** ${{ env.APP_VERSION }}
-            **Commit:** ${{ github.sha }}
-            **Built on:** ${{ github.run_number }}
+            **🔖 Version:** `${{ env.APP_VERSION }}`
+            **🔗 Commit:** `${{ github.sha }}`
+            **📅 Date:** `${{ github.event.head_commit.timestamp }}`
             
-            ### 📋 Build Information
-            - **OS:** Windows Latest
-            - **Python:** ${{ matrix.python-version }}
-            - **Tests:** ✅ Passed
+            ### 📋 Build Details
+            - **OS:** `${{ runner.os }}`
+            - **Python Version:** `${{ matrix.python-version }}`
+            - **Workflow Run:** [#${{ github.run_number }}](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
             
-            ### 🔒 Security
-            - Scanned with Bandit
-            - Dependencies checked with Safety
-            - SBOM included
+            ### 🔒 Security Checks
+            - 🔍 Scanned with **Bandit**
+            - 📦 Dependencies checked with **Safety**
+            - 📄 SBOM (Software Bill of Materials): _included_
+            - 🔐 Secrets scanning: _enabled in workflow_
+
+            ### 📦 Artifacts
+            - App executable and metadata are included in this release.
+            
+            ---
+            _This release was generated automatically via CI/CD pipeline._
           files: |
             exe/${{ env.APP_NAME }} v. ${{ env.APP_VERSION }}.exe
+            sbom.json
           generate_release_notes: true
