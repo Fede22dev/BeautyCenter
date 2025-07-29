@@ -21,12 +21,15 @@ $console_or_windowed_flag = ""
 $exe_name = ""
 $upx_flag = ""
 
+Write-Host ""
+
 if ($env:CI -ne 'true')
 {
     # --- Local Environment Detected ---
     Write-Host "[INFO] Local build detected." -ForegroundColor Green
 
     $activate_script = Join-Path $ProjectRoot ".venv\Scripts\activate.ps1"
+
     if (Test-Path $activate_script)
     {
         Write-Host "[INFO] Activating virtualenv..."
@@ -41,6 +44,7 @@ if ($env:CI -ne 'true')
     $console_or_windowed_flag = "--console"
     $exe_name = "Beauty Center DBG v. $exe_version"
     $local_upx_path = "C:\Program Files\upx" # <-- MODIFY THIS IF YOUR UPX IS ELSEWHERE
+
     if (Test-Path $local_upx_path)
     {
         Write-Host "[INFO] UPX found at '$local_upx_path'. Compression will be enabled."
@@ -55,6 +59,7 @@ else
 {
     # --- CI Environment Detected (e.g., GitHub Actions) ---
     Write-Host "[INFO] CI environment detected." -ForegroundColor Green
+
     $console_or_windowed_flag = "--windowed"
     $exe_name = "Beauty Center v. $exe_version"
 
@@ -70,11 +75,15 @@ else
 }
 
 # --- PRE BUILD: CONVERT QT FILES TO PY ---
+Write-Host ""
+Write-Host "[STEP 1/3] Running Converting script (convert_qt_files_to_py.ps1)..." -ForegroundColor Yellow
+
 $convert_script = Join-Path $ScriptPath "convert_qt_files_to_py.ps1"
-Write-Host "`n[STEP 1/3] Running Converting script (convert_qt_files_to_py.ps1)..." -ForegroundColor Yellow
+
 if (Test-Path  $convert_script)
 {
     &  $convert_script
+
     if (-not $?)
     {
         Write-Error "[FATAL] Converting script failed! Aborting build.";
@@ -91,11 +100,15 @@ else
 }
 
 # --- PRE BUILD: GENERATE AND UPDATE TRANSLATIONS ---
-Write-Host "`n[STEP 2/3] Running translation script (generate_translations.ps1)..." -ForegroundColor Yellow
+Write-Host ""
+Write-Host "[STEP 2/3] Running translation script (generate_translations.ps1)..." -ForegroundColor Yellow
+
 $translation_script = Join-Path $ScriptPath "generate_translations.ps1"
+
 if (Test-Path $translation_script)
 {
     & $translation_script
+
     if (-not $?)
     {
         Write-Error "[FATAL] Translation script failed! Aborting build.";
@@ -114,6 +127,7 @@ else
 # --- CLEAN OLD FILES ONLY IN exe/ ---
 Write-Host ""
 Write-Host "[STEP 3/4] Cleaning old build files in /exe..." -ForegroundColor Yellow
+
 if (Test-Path $exeDir)
 {
     Remove-Item "$exeDir\*" -Recurse -ErrorAction SilentlyContinue
@@ -154,9 +168,9 @@ $pyArgs = @(
     "--collect-submodules", "PySide6.QtNetwork",
     "--collect-submodules", "PySide6.QtUiTools",
     "--collect-submodules", "PySide6.QtWidgets",
-    "--add-data", "../src/beauty_center/ui/views${sep}src/beauty_center/ui/views",
     "--add-data", "../translations/generated_qm${sep}translations/generated_qm",
-    "--splash", "../src/beauty_center/resources/images/a350.png"
+    "--splash", "../src/beauty_center/resources/images/splash_screen.png",
+    "--icon", "../src/beauty_center/resources/icons/windows_icon.ico"
 )
 
 if ($upx_flag)
@@ -166,8 +180,11 @@ if ($upx_flag)
 
 $pyArgs += "src/beauty_center/main.py"
 
+Write-Host ""
 Write-Host "`n[INFO] PyInstaller command (ready to launch):"
 Write-Host "pyinstaller $( $pyArgs -join ' ' )" -ForegroundColor Magenta
+
+Write-Host ""
 Write-Host "[STEP 4/4] Executing PyInstaller build..." -ForegroundColor Yellow
 
 pyinstaller @pyArgs
@@ -181,4 +198,5 @@ else
 {
     Write-Error "[FAIL] Build failed. Check errors above."
 }
+
 Write-Host "=== BUILD SCRIPT COMPLETE ===" -ForegroundColor Cyan

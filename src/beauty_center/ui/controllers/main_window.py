@@ -2,7 +2,8 @@ from PySide6.QtCore import QPropertyAnimation, QEasingCurve
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QMainWindow, QPushButton
 
-from ui.generated_ui.main_window import Ui_beauty_center_main_window # noqa: F401
+from resources.generated_qrc import icons_rc  # noqa: F401
+from ui.generated_ui.main_window import Ui_beauty_center_main_window  # noqa: F401
 
 
 class BeautyCenterMainWindow(QMainWindow):
@@ -47,8 +48,8 @@ class BeautyCenterMainWindow(QMainWindow):
             self._update_sidebar_ui()
 
     def _update_sidebar_ui(self):
-        icon_name = QIcon.ThemeIcon.GoPrevious if self.sidebar_expanded else QIcon.ThemeIcon.GoNext
-        self.ui.exp_col_sidebar_pb.setIcon(QIcon.fromTheme(icon_name))
+        icon = ":/icons/menu_close" if self.sidebar_expanded else ":/icons/menu_open"
+        self.ui.exp_col_sidebar_pb.setIcon(QIcon(icon))
 
         for btn in self.sidebar_buttons:
             full_text = btn.property("fullText") or ""

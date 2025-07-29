@@ -9,10 +9,6 @@ __pycache__/
 *.egg
 *.egg-info/
 .eggs/
-dist/
-build/
-*.log
-*.spec
 
 # -------------------------------
 # Virtual environments
@@ -44,10 +40,20 @@ env/
 moc_*.cpp
 qrc_*.cpp
 ui_*.h
-/src/beauty_center/ui/generated_ui/
-/src/beauty_center/resources/generated_qrc/
-/translations/generated_qm/
+src/beauty_center/ui/generated_ui/
+src/beauty_center/resources/generated_qrc/
+translations/generated_qm/
 # These are generated files from Qt tools (e.g., `pyside6-uic`, `pyrcc`) — no need to version them.
+
+# -------------------------------
+# PyInstaller exe builder
+# -------------------------------
+*.exe
+*.spec
+*.log
+exe/
+dist/
+build/
 
 # -------------------------------
 # PyCharm project files

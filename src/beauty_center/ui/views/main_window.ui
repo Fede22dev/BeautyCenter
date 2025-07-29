@@ -71,7 +71,8 @@
             <cursorShape>PointingHandCursor</cursorShape>
            </property>
            <property name="icon">
-            <iconset theme="QIcon::ThemeIcon::GoNext"/>
+            <iconset resource="../../resources/qrc/icons.qrc">
+             <normaloff>:/icons/menu_open</normaloff>:/icons/menu_open</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -297,6 +298,8 @@
    <header location="global">QtWebEngineWidgets/QWebEngineView</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../../resources/qrc/icons.qrc"/>
+ </resources>
  <connections/>
 </ui>

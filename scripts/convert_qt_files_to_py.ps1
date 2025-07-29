@@ -1,28 +1,34 @@
 Write-Host ""
-Write-Host "==================== QT CONVERT UI TO PY + QRC ====================" -ForegroundColor Yellow
+Write-Host "`n================= QT UI + QRC -> PY BUILD PIPELINE =================" -ForegroundColor Yellow
 
-# [STEP 1/6] Get script root and define dirs
-Write-Host "[STEP 1/6] Setting paths..." -ForegroundColor Magenta
+# --- [STEP 1/7] Define directory structure
+Write-Host ""
+Write-Host "[STEP 1/7] Setting up paths..." -ForegroundColor Magenta
 
-$ScriptPath  = $PSScriptRoot
+$ScriptPath = $PSScriptRoot
 $ProjectRoot = Split-Path $ScriptPath -Parent
-
-$inputDir        = Join-Path $ProjectRoot "src" "beauty_center" "ui" "views"
-$outputDir       = Join-Path $ProjectRoot "src" "beauty_center" "ui" "generated_ui"
-$resourcesDir    = Join-Path $ProjectRoot "src" "beauty_center" "resources"
-$qrcDir          = Join-Path $resourcesDir "qrc"
-$iconsQrc        = Join-Path $qrcDir "icons.qrc"
-$imagesQrc       = Join-Path $qrcDir "images.qrc"
-$stylesQrc       = Join-Path $qrcDir "styles.qrc"
+$inputDir = Join-Path $ProjectRoot "src" "beauty_center" "ui" "views"
+$outputDir = Join-Path $ProjectRoot "src" "beauty_center" "ui" "generated_ui"
+$resourcesDir = Join-Path $ProjectRoot "src" "beauty_center" "resources"
+$qrcDir = Join-Path $resourcesDir "qrc"
 $generatedQrcDir = Join-Path $resourcesDir "generated_qrc"
 
-# [STEP 2/6] Ensure output directories exist
-Write-Host "[STEP 2/6] Checking output directories..." -ForegroundColor Magenta
+# List of all QRC file paths
+$qrcFiles = @(
+    (Join-Path $qrcDir "icons.qrc"), # Path to icons QRC
+    (Join-Path $qrcDir "images.qrc"), # Path to images QRC
+    (Join-Path $qrcDir "styles.qrc")     # Path to styles QRC
+)
+
+# --- [STEP 2/7] Ensure output directories exist
+Write-Host ""
+Write-Host "[STEP 2/7] Ensuring output directories exist..." -ForegroundColor Magenta
+
 foreach ($dir in @($outputDir, $generatedQrcDir))
 {
     if (-not (Test-Path $dir))
     {
-        Write-Host "Output dir not found. Creating: $dir" -ForegroundColor Yellow
+        Write-Host "Creating missing dir: $dir" -ForegroundColor Yellow
         New-Item -ItemType Directory -Force -Path $dir | Out-Null
     }
     else
@@ -31,136 +37,103 @@ foreach ($dir in @($outputDir, $generatedQrcDir))
     }
 }
 
-# [STEP 3/6] CLEAN all old generated files
-Write-Host "[STEP 3/6] Cleaning old generated files..." -ForegroundColor Magenta
-# Delete ALL .py in UI generated dir
+# --- [STEP 3/7] Clean old generated files (UI and _rc.py)
+Write-Host ""
+Write-Host "[STEP 3/7] Cleaning old build files..." -ForegroundColor Magenta
+
+# Remove old UI Python files
 if (Test-Path $outputDir)
 {
-    $uiToDelete = Get-ChildItem -Path $outputDir -Filter *.py -File
-    foreach ($f in $uiToDelete)
-    {
-        Write-Host "Deleting: $( $f.FullName )" -ForegroundColor DarkYellow
-        Remove-Item $f.FullName -Force
-    }
+    Get-ChildItem -Path $outputDir -Filter *.py -File | Remove-Item -Force
 }
 
-# Delete ALL _rc.py files in generated_qrc
+# Remove old resource Python files in generated_qrc
 if (Test-Path $generatedQrcDir)
 {
-    $qrcToDelete = Get-ChildItem -Path $generatedQrcDir -Filter *_rc.py -File
-    foreach ($f in $qrcToDelete)
-    {
-        Write-Host "Deleting: $( $f.FullName )" -ForegroundColor DarkYellow
-        Remove-Item $f.FullName -Force
-    }
+    Get-ChildItem -Path $generatedQrcDir -Filter *_rc.py -File | Remove-Item -Force
 }
 
-# [STEP 4/6] Find PySide6 UIC and RCC commands
-Write-Host "[STEP 4/6] Searching for pyside6-uic and pyside6-rcc..." -ForegroundColor Magenta
-$uicCommand = ""
-$rccCommand = ""
+# --- [STEP 4/7] Find PySide6 tools
+Write-Host ""
+Write-Host "[STEP 4/7] Locating pyside6-uic and pyside6-rcc..." -ForegroundColor Magenta
+
+function Find-Tool($winPath, $nixPath, $toolName)
+{
+    if (Test-Path $winPath)
+    {
+        return $winPath
+    }
+    if (Test-Path $nixPath)
+    {
+        return $nixPath
+    }
+
+    $tool = Get-Command $toolName -ErrorAction SilentlyContinue
+
+    if ($tool)
+    {
+        return $tool.Path
+    }
+
+    throw "'$toolName' NOT found in virtualenv or system PATH."
+}
 
 $venvScriptsWin = Join-Path $ProjectRoot ".venv" "Scripts"
-$venvBinNix     = Join-Path $ProjectRoot ".venv" "bin"
-$uicInVenvWin   = Join-Path $venvScriptsWin "pyside6-uic.exe"
-$uicInVenvNix   = Join-Path $venvBinNix "pyside6-uic"
-$rccInVenvWin   = Join-Path $venvScriptsWin "pyside6-rcc.exe"
-$rccInVenvNix   = Join-Path $venvBinNix "pyside6-rcc"
+$venvBinNix = Join-Path $ProjectRoot ".venv" "bin"
 
-if (Test-Path $uicInVenvWin)
-{
-    Write-Host "Found pyside6-uic in venv (Windows): $uicInVenvWin" -ForegroundColor Cyan
-    $uicCommand = $uicInVenvWin
-}
-elseif (Test-Path $uicInVenvNix)
-{
-    Write-Host "Found pyside6-uic in venv (Unix): $uicInVenvNix" -ForegroundColor Cyan
-    $uicCommand = $uicInVenvNix
-}
-elseif(Get-Command pyside6-uic -ErrorAction SilentlyContinue)
-{
-    Write-Host "Found pyside6-uic in system PATH." -ForegroundColor Cyan
-    $uicCommand = "pyside6-uic"
-}
-else
-{
-    Write-Host "'pyside6-uic' NOT found in venv or system PATH." -ForegroundColor Red
-    exit 1
-}
+$uicCommand = Find-Tool (Join-Path $venvScriptsWin "pyside6-uic.exe") (Join-Path $venvBinNix "pyside6-uic") "pyside6-uic"
+$rccCommand = Find-Tool (Join-Path $venvScriptsWin "pyside6-rcc.exe") (Join-Path $venvBinNix "pyside6-rcc") "pyside6-rcc"
 
-if (Test-Path $rccInVenvWin)
-{
-    Write-Host "Found pyside6-rcc in venv (Windows): $rccInVenvWin" -ForegroundColor Cyan
-    $rccCommand = $rccInVenvWin
-}
-elseif (Test-Path $rccInVenvNix)
-{
-    Write-Host "Found pyside6-rcc in venv (Unix): $rccInVenvNix" -ForegroundColor Cyan
-    $rccCommand = $rccInVenvNix
-}
-elseif (Get-Command pyside6-rcc -ErrorAction SilentlyContinue)
-{
-    Write-Host "Found pyside6-rcc in system PATH." -ForegroundColor Cyan
-    $rccCommand = "pyside6-rcc"
-}
-else
-{
-    Write-Host "'pyside6-rcc' NOT found in venv or system PATH." -ForegroundColor Red
-    exit 1
-}
+Write-Host "Found tools:" -ForegroundColor Green
+Write-Host "  UIC: $uicCommand" -ForegroundColor DarkGray
+Write-Host ""
+Write-Host "  RCC: $rccCommand" -ForegroundColor DarkGray
+Write-Host ""
 
-# [STEP 5/6] Search .ui files and convert
-Write-Host "[STEP 5/6] Searching for .ui files and launching conversion..." -ForegroundColor Magenta
+# --- [STEP 5/7] Convert all .ui files to Python
+Write-Host ""
+Write-Host "[STEP 5/7] Converting .ui files to .py..." -ForegroundColor Magenta
 
 $uiFiles = Get-ChildItem -Path $inputDir -Filter *.ui -Recurse
-if (-not $uiFiles)
+
+foreach ($file in $uiFiles)
 {
-    Write-Host "No .ui files found in $inputDir. Nothing to do." -ForegroundColor Yellow
-}
-else
-{
-    Write-Host ("Found {0} UI file(s) to convert." -f $uiFiles.Count) -ForegroundColor Cyan
-    foreach ($file in $uiFiles)
+    $inputFile = $file.FullName
+    $outputFile = Join-Path $outputDir ("{0}.py" -f $file.BaseName)
+    $process = Start-Process -FilePath $uicCommand `
+        -ArgumentList '-o', $outputFile, $inputFile `
+        -NoNewWindow -Wait -PassThru
+
+    if ($process.ExitCode -eq 0)
     {
-        $inputFile = $file.FullName
-        $outputFile = Join-Path $outputDir ($file.BaseName + ".py")
-        Write-Host ("Converting {0} ..." -f $file.Name) -ForegroundColor Cyan
-        $process = Start-Process -FilePath $uicCommand `
-                    -ArgumentList '-o', $outputFile, $inputFile `
-                    -NoNewWindow -Wait -PassThru
-        if ($process.ExitCode -eq 0)
-        {
-            Write-Host "Conversion OK -> $outputFile" -ForegroundColor Green
-        }
-        else
-        {
-            Write-Host "ERROR converting $inputFile (ExitCode: $( $process.ExitCode ))" -ForegroundColor Red
-        }
+        Write-Host "Converted: $( $file.Name ) -> $outputFile" -ForegroundColor Green
+    }
+    else
+    {
+        Write-Host "ERROR converting $inputFile (ExitCode: $( $process.ExitCode ))" -ForegroundColor Red
     }
 }
 
-# [STEP 6/6] Compile .qrc files into Python resource modules in 'generated_qrc'
-Write-Host "[STEP 6/6] Compiling .qrc resource files..." -ForegroundColor Magenta
-$compiledQrcFiles = @{ }
-foreach ($qrcFile in @($iconsQrc, $imagesQrc, $stylesQrc))
+# --- [STEP 6/7] Compile all .qrc files to Python resource modules
+Write-Host ""
+Write-Host "[STEP 6/7] Compiling QRC resource files..." -ForegroundColor Magenta
+
+foreach ($qrcFile in $qrcFiles)
 {
     if (Test-Path $qrcFile)
     {
         $qrcBaseName = [System.IO.Path]::GetFileNameWithoutExtension($qrcFile)
         $outputQrcPy = Join-Path $generatedQrcDir ("{0}_rc.py" -f $qrcBaseName)
-        $qrcWorkingDir = Split-Path $qrcFile
-        # Get the output as an absolute path (for Start-Process from different dir)
-        $absOutputQrcPy = [System.IO.Path]::GetFullPath($outputQrcPy)
         $qrcFileName = Split-Path $qrcFile -Leaf
-        Write-Host ("Compiling {0} in {1} -> {2}" -f $qrcFile, $qrcWorkingDir, $absOutputQrcPy) -ForegroundColor Yellow
+        $absOutputQrcPy = [System.IO.Path]::GetFullPath($outputQrcPy)
         $process = Start-Process -FilePath $rccCommand `
-                    -WorkingDirectory $qrcWorkingDir `
-                    -ArgumentList $qrcFileName, "-o", $absOutputQrcPy `
-                    -NoNewWindow -Wait -PassThru
+            -WorkingDirectory (Split-Path $qrcFile) `
+            -ArgumentList $qrcFileName, "-o", $absOutputQrcPy `
+            -NoNewWindow -Wait -PassThru
+
         if ($process.ExitCode -eq 0)
         {
-            Write-Host "QRC Compile OK -> $absOutputQrcPy" -ForegroundColor Green
-            $compiledQrcFiles[$qrcFile] = $absOutputQrcPy
+            Write-Host "QRC Compiled: $qrcFile -> $absOutputQrcPy" -ForegroundColor Green
         }
         else
         {
@@ -169,9 +142,35 @@ foreach ($qrcFile in @($iconsQrc, $imagesQrc, $stylesQrc))
     }
     else
     {
-        Write-Host ("Resource file not found: {0}" -f $qrcFile) -ForegroundColor Red
+        Write-Host "Resource file not found: $qrcFile" -ForegroundColor Red
     }
 }
 
-Write-Host "`nPipeline completed: all UI and QRC files processed." -ForegroundColor Green
-Write-Host "=========================================================================" -ForegroundColor Yellow
+# --- [STEP 7/7] Patch all generated UI files to fix QRC resource imports
+Write-Host ""
+Write-Host ("[STEP 7/7] Patching resource imports (e.g., icons_rc, images_rc, styles_rc)...") -ForegroundColor Magenta
+
+$patchPattern = 'import (\w+_rc)\b'
+$patchReplacement = 'from resources.generated_qrc import $1'
+
+$uiPyFiles = Get-ChildItem -Path $outputDir -Filter *.py
+
+foreach ($f in $uiPyFiles)
+{
+    $content = Get-Content $f.FullName -Raw
+
+    if ($content -match $patchPattern)
+    {
+        $content = [regex]::Replace($content, $patchPattern, $patchReplacement)
+        Set-Content $f.FullName $content
+        Write-Host "  Patched: $( $f.Name )" -ForegroundColor Green
+    }
+    else
+    {
+        Write-Host "  No resource patch needed: $( $f.Name )" -ForegroundColor Gray
+    }
+}
+
+Write-Host ""
+Write-Host "Pipeline completed! All UI and QRC files processed with patched imports." -ForegroundColor Yellow
+Write-Host "====================================================================" -ForegroundColor Yellow

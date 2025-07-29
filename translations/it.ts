@@ -4,37 +4,37 @@
 <context>
     <name>beauty_center_main_window</name>
     <message>
-        <location filename="../src/beauty_center/ui/views/main_window.ui" line="124"/>
+        <location filename="../src/beauty_center/ui/views/main_window.ui" line="125"/>
         <source> APPOINTMENTS</source>
         <translation> APPUNTAMENTI</translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/ui/views/main_window.ui" line="152"/>
+        <location filename="../src/beauty_center/ui/views/main_window.ui" line="153"/>
         <source> CLIENTS</source>
         <translation> CLIENTI</translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/ui/views/main_window.ui" line="180"/>
+        <location filename="../src/beauty_center/ui/views/main_window.ui" line="181"/>
         <source> TREATMENTS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/ui/views/main_window.ui" line="224"/>
+        <location filename="../src/beauty_center/ui/views/main_window.ui" line="225"/>
         <source> SETTINGS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/ui/views/main_window.ui" line="256"/>
+        <location filename="../src/beauty_center/ui/views/main_window.ui" line="257"/>
         <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/ui/views/main_window.ui" line="268"/>
+        <location filename="../src/beauty_center/ui/views/main_window.ui" line="269"/>
         <source>about:blank</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/ui/views/main_window.ui" line="280"/>
+        <location filename="../src/beauty_center/ui/views/main_window.ui" line="281"/>
         <source>PushButton</source>
         <translation type="unfinished"></translation>
     </message>
