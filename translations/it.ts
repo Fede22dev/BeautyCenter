@@ -89,9 +89,9 @@
     <message>
         <location filename="../src/beauty_center/main.py" line="86"/>
         <location filename="../src/beauty_center/main.py" line="117"/>
-        <location filename="../src/beauty_center/main.py" line="335"/>
-        <location filename="../src/beauty_center/main.py" line="398"/>
-        <location filename="../src/beauty_center/main.py" line="429"/>
+        <location filename="../src/beauty_center/main.py" line="353"/>
+        <location filename="../src/beauty_center/main.py" line="416"/>
+        <location filename="../src/beauty_center/main.py" line="447"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
@@ -186,86 +186,87 @@ The correct name will now be restored.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="248"/>
+        <location filename="../src/beauty_center/main.py" line="247"/>
         <source>A new version is available:
-Local version: {curr_ver}
-Remote version: {latest_ver}
+Current version: {curr_ver}
+New version: {latest_ver}
 
 Download now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="254"/>
+        <location filename="../src/beauty_center/main.py" line="255"/>
         <source>Download cancelled.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="258"/>
+        <location filename="../src/beauty_center/main.py" line="259"/>
         <source>Downloading latest version...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="269"/>
+        <location filename="../src/beauty_center/main.py" line="270"/>
         <source>Failed to get download URL for latest release.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="274"/>
+        <location filename="../src/beauty_center/main.py" line="275"/>
         <source>Downloading latest version {display_name} from ({download_url})</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="284"/>
-        <source>Downloading latest version {display_name} to ({out_path})</source>
+        <location filename="../src/beauty_center/main.py" line="286"/>
+        <source>Downloading latest version {display_name} to ({out_path})
+ETA: {eta}s - Speed: {speed:.1f} MB/s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="306"/>
+        <location filename="../src/beauty_center/main.py" line="324"/>
         <source>Failed to download latest version:
 {exception}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="313"/>
+        <location filename="../src/beauty_center/main.py" line="331"/>
         <source>Downloaded latest version {display_name} to ({out_path})</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="336"/>
+        <location filename="../src/beauty_center/main.py" line="354"/>
         <source>Failed to start local server:
 {instance_server_name}
 Error: {error}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="370"/>
+        <location filename="../src/beauty_center/main.py" line="388"/>
         <source>Loaded Italian translation.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="374"/>
+        <location filename="../src/beauty_center/main.py" line="392"/>
         <source>Italian translation not found. Use default English translation.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="399"/>
+        <location filename="../src/beauty_center/main.py" line="417"/>
         <source>Unexpected positional argument(s) found:
 {positional_args}.
 Use --help or -h for usage information.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="429"/>
+        <location filename="../src/beauty_center/main.py" line="447"/>
         <source>Another instance of {app_name} is already running.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="442"/>
+        <location filename="../src/beauty_center/main.py" line="460"/>
         <source>Loaded style {file_name}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/main.py" line="445"/>
+        <location filename="../src/beauty_center/main.py" line="463"/>
         <source>Failed to load style {file_name}</source>
         <translation type="unfinished"></translation>
     </message>

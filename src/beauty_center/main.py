@@ -244,7 +244,8 @@ def _check_is_latest_release() -> None:
 
     title = QCoreApplication.translate("main", "New Version Available")
     message = QCoreApplication.translate("main",
-                                         "A new version is available:\nLocal version: {curr_ver}\nRemote version: {latest_ver}\n\nDownload now?")
+                                         "A new version is available:\nCurrent version: {curr_ver}\nNew version: {latest_ver}\n\nDownload now?").format(
+        curr_ver=APP_VERSION, latest_ver=latest_ver.base_version)
     message_log = message.replace("\n", " ").replace("  ", " ").strip()
     qInfo(f"{_ID_TAG} {message_log}")
     result = QMessageBox.information(None, title, message,
@@ -280,10 +281,10 @@ def _check_is_latest_release() -> None:
             response.raise_for_status()
             total = int(response.headers.get('content-length', 0))
 
-            message = QCoreApplication.translate("main",
-                                                 "Downloading latest version {display_name} to ({out_path})").format(
-                display_name=display_name, out_path=out_path)
-            progress = QProgressDialog(message, "", 0, total)
+            message_template = QCoreApplication.translate("main",
+                                                          "Downloading latest version {display_name} to ({out_path})\nETA: {eta}s - Speed: {speed:.1f} MB/s")
+            progress = QProgressDialog("", "", 0, total)
+            progress.setWindowTitle("Download")
             progress.setWindowModality(Qt.WindowModality.WindowModal)
             progress.setCancelButton(None)
             progress.setMinimumDuration(0)
@@ -291,6 +292,8 @@ def _check_is_latest_release() -> None:
 
             with open(out_path, "wb") as file, tqdm(total=total, unit='B', unit_scale=True, unit_divisor=1024,
                                                     desc=f"Downloading {display_name}") as bar:
+                start_time = time.time()
+                last_eta_update = 0
                 downloaded = 0
                 for chunk in response.iter_content(chunk_size=8192):
                     QApplication.processEvents()
@@ -300,6 +303,21 @@ def _check_is_latest_release() -> None:
                         downloaded += len(chunk)
                         progress.setValue(downloaded)
                         bar.update(len(chunk))
+
+                        now = time.time()
+                        elapsed = now - start_time
+                        if elapsed > 0 and now - last_eta_update > 0.5:
+                            speed = downloaded / elapsed / 1024 / 1024  # MB/s
+                            eta = int((total - downloaded) / (downloaded / elapsed)) if downloaded > 0 else 0
+
+                            def format_eta(seconds) -> str:
+                                m, s = divmod(seconds, 60)
+                                h, m = divmod(m, 60)
+                                return f"{int(h):02d}:{int(m):02d}:{int(s):02d}"
+
+                            message = message_template.format(display_name=display_name, out_path=out_path, eta=format_eta(eta), speed=speed)
+                            progress.setLabelText(message)
+                            last_eta_update = now
 
             progress.setValue(total)
     except Exception as e:
