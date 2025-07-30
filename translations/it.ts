@@ -4,38 +4,23 @@
 <context>
     <name>beauty_center_main_window</name>
     <message>
-        <location filename="../src/beauty_center/ui/views/main_window.ui" line="125"/>
+        <location filename="../src/beauty_center/ui/views/main_window.ui" line="126"/>
         <source> APPOINTMENTS</source>
         <translation> APPUNTAMENTI</translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/ui/views/main_window.ui" line="153"/>
+        <location filename="../src/beauty_center/ui/views/main_window.ui" line="155"/>
         <source> CLIENTS</source>
         <translation> CLIENTI</translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/ui/views/main_window.ui" line="181"/>
+        <location filename="../src/beauty_center/ui/views/main_window.ui" line="184"/>
         <source> TREATMENTS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/beauty_center/ui/views/main_window.ui" line="225"/>
+        <location filename="../src/beauty_center/ui/views/main_window.ui" line="232"/>
         <source> SETTINGS</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/beauty_center/ui/views/main_window.ui" line="257"/>
-        <source>TextLabel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/beauty_center/ui/views/main_window.ui" line="269"/>
-        <source>about:blank</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/beauty_center/ui/views/main_window.ui" line="281"/>
-        <source>PushButton</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -43,7 +43,7 @@
         <property name="frameShadow">
          <enum>QFrame::Shadow::Plain</enum>
         </property>
-        <layout class="QVBoxLayout" name="leftMenuLayout" stretch="0,0,1,1,1,0,0">
+        <layout class="QVBoxLayout" name="sidebar_layout" stretch="0,0,1,1,1,0,0">
          <property name="spacing">
           <number>32</number>
          </property>
@@ -86,7 +86,7 @@
           </widget>
          </item>
          <item>
-          <spacer name="vertical_spacer_2">
+          <spacer name="vertical_spacer_up">
            <property name="orientation">
             <enum>Qt::Orientation::Vertical</enum>
            </property>
@@ -113,7 +113,8 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset theme="edit-find"/>
+            <iconset resource="../../resources/qrc/icons.qrc">
+             <normaloff>:/icons/appointments_calendar</normaloff>:/icons/appointments_calendar</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -141,7 +142,8 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset theme="QIcon::ThemeIcon::AddressBookNew"/>
+            <iconset resource="../../resources/qrc/icons.qrc">
+             <normaloff>:/icons/clients_list</normaloff>:/icons/clients_list</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -169,7 +171,8 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset theme="accessories-dictionary"/>
+            <iconset resource="../../resources/qrc/icons.qrc">
+             <normaloff>:/icons/treatments_list</normaloff>:/icons/treatments_list</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -183,7 +186,7 @@
           </widget>
          </item>
          <item>
-          <spacer name="vertical_spacer">
+          <spacer name="vertical_spacer_down">
            <property name="orientation">
             <enum>Qt::Orientation::Vertical</enum>
            </property>
@@ -213,13 +216,17 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset theme="QIcon::ThemeIcon::DocumentProperties"/>
+            <iconset resource="../../resources/qrc/icons.qrc">
+             <normaloff>:/icons/settings</normaloff>:/icons/settings</iconset>
            </property>
            <property name="iconSize">
             <size>
              <width>24</width>
              <height>24</height>
             </size>
+           </property>
+           <property name="flat">
+            <bool>true</bool>
            </property>
            <property name="fullText" stdset="0">
             <string> SETTINGS</string>
@@ -243,47 +250,9 @@
         <property name="frameShadow">
          <enum>QFrame::Shadow::Plain</enum>
         </property>
-        <property name="midLineWidth">
-         <number>0</number>
-        </property>
         <property name="currentIndex">
-         <number>2</number>
+         <number>-1</number>
         </property>
-        <widget class="QWidget" name="page">
-         <layout class="QGridLayout" name="gridLayout_3">
-          <item row="0" column="0">
-           <widget class="QLabel" name="label">
-            <property name="text">
-             <string>TextLabel</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-        <widget class="QWidget" name="page_3">
-         <layout class="QGridLayout" name="gridLayout_4">
-          <item row="0" column="0">
-           <widget class="QWebEngineView" name="webEngineView">
-            <property name="url">
-             <url>
-              <string>about:blank</string>
-             </url>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-        <widget class="QWidget" name="page_2">
-         <layout class="QGridLayout" name="gridLayout_2">
-          <item row="0" column="0">
-           <widget class="QPushButton" name="pushButton_5">
-            <property name="text">
-             <string>PushButton</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
        </widget>
       </item>
      </layout>
@@ -291,13 +260,6 @@
    </layout>
   </widget>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>QWebEngineView</class>
-   <extends>QWidget</extends>
-   <header location="global">QtWebEngineWidgets/QWebEngineView</header>
-  </customwidget>
- </customwidgets>
  <resources>
   <include location="../../resources/qrc/icons.qrc"/>
  </resources>
