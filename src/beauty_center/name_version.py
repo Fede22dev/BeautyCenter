@@ -23,4 +23,4 @@ Example:
  1.1.1 = bug fix on version 1.1.0
  2.0.0 = breaking change, major rewrite
 """
-APP_VERSION = "0.0.5"
+APP_VERSION = "0.0.6"

@@ -74,6 +74,8 @@ else
     }
 }
 
+$console_or_windowed_flag = "--console" # TODO REMOVE FOR FINAL RELEASE
+
 # --- PRE BUILD: CONVERT QT FILES TO PY ---
 Write-Host ""
 Write-Host "[STEP 1/3] Running Converting script (convert_qt_files_to_py.ps1)..." -ForegroundColor Yellow

@@ -1,3 +1,4 @@
+import hashlib
 import re
 import sys
 import time
@@ -183,7 +184,8 @@ def _check_connection_quality(max_latency_ms: int = 350) -> bool:
     try:
         url = "https://www.google.com/generate_204"
         start = time.time()
-        response = requests.get(url, timeout=3)
+        response = requests.get(url, timeout=5, allow_redirects=False, verify=True)
+        response.raise_for_status()
         latency = (time.time() - start) * 1000  # ms
 
         if response.status_code == 204 and latency <= max_latency_ms:
@@ -208,11 +210,19 @@ def _check_connection_quality(max_latency_ms: int = 350) -> bool:
 def _check_is_latest_release() -> None:
     api_url = f"https://api.github.com/repos/{GITHUB_REPO_NAME}/releases/latest"
 
+    session = requests.Session()
+    session.headers.update({
+        "User-Agent": f"{APP_NAME}/{APP_VERSION} (+https://github.com/{GITHUB_REPO_NAME})",
+        "Accept": "application/vnd.github+json"
+    })
+
     data = {}
     try:
-        r = requests.get(api_url, timeout=5)
-        r.raise_for_status()
-        data = r.json()
+        result = session.get(api_url, timeout=5, allow_redirects=False, verify=True)
+        if not result.url.startswith("https://"):
+            raise Exception("Insecure redirect detected.")
+        result.raise_for_status()
+        data = result.json()
     except Exception as e:
         message = QCoreApplication.translate("main",
                                              "Failed to check for latest release: {api_url} Error: {exception}").format(
@@ -250,7 +260,7 @@ def _check_is_latest_release() -> None:
     qInfo(f"{_ID_TAG} {message_log}")
     result = QMessageBox.information(None, title, message,
                                      QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.Cancel)
-    if result == QMessageBox.StandardButton.Cancel:
+    if result != QMessageBox.StandardButton.Ok:
         message = QCoreApplication.translate("main", "Download cancelled.")
         qInfo(f"{_ID_TAG} {message}")
         return
@@ -264,9 +274,18 @@ def _check_is_latest_release() -> None:
         _stop_and_run_new_exe(out_path)
         return
 
-    download_url = latest_asset["browser_download_url"]
-    if not download_url:
-        message = QCoreApplication.translate("main", "Failed to get download URL for latest release.")
+    exe_name = latest_asset.get("name", "")
+    if not exe_name.lower().endswith(".exe") or ".." in exe_name or "/" in exe_name or "\\" in exe_name:
+        message = QCoreApplication.translate("main", "Invalid filename: {exe_name}").format(exe_name=exe_name)
+        qWarning(f"{_ID_TAG} {message}")
+        return
+
+    download_url = latest_asset.get("browser_download_url", "")
+    expected_digest = latest_asset.get("digest", "")
+    expected_size = latest_asset.get("size", 0)
+
+    if not download_url or not expected_digest:
+        message = QCoreApplication.translate("main", "Failed to get download URL or digest for latest release.")
         QMessageBox.critical(None, title, message)
         qWarning(f"{_ID_TAG} {message}")
         return
@@ -277,9 +296,11 @@ def _check_is_latest_release() -> None:
     qInfo(f"{_ID_TAG} {message}")
 
     try:
-        with requests.get(download_url, timeout=5, stream=True) as response:
+        with requests.get(download_url, timeout=10, stream=True) as response:
             response.raise_for_status()
-            total = int(response.headers.get('content-length', 0))
+            total = int(response.headers.get("content-length", 0))
+            if total != expected_size:
+                raise Exception(f"Unexpected file size. Expected {expected_size}, got {total}")
 
             message_template = QCoreApplication.translate("main",
                                                           "Downloading latest version {display_name} to ({out_path})\nETA: {eta}s - Speed: {speed:.1f} MB/s")
@@ -290,7 +311,9 @@ def _check_is_latest_release() -> None:
             progress.setMinimumDuration(0)
             progress.setValue(0)
 
-            with open(out_path, "wb") as file, tqdm(total=total, unit='B', unit_scale=True, unit_divisor=1024,
+            sha256 = hashlib.sha256()
+
+            with open(out_path, "wb") as file, tqdm(total=total, unit="B", unit_scale=True, unit_divisor=1024,
                                                     desc=f"Downloading {display_name}") as bar:
                 start_time = time.time()
                 last_eta_update = 0
@@ -300,6 +323,7 @@ def _check_is_latest_release() -> None:
 
                     if chunk:
                         file.write(chunk)
+                        sha256.update(chunk)
                         downloaded += len(chunk)
                         progress.setValue(downloaded)
                         bar.update(len(chunk))
@@ -320,6 +344,12 @@ def _check_is_latest_release() -> None:
                             last_eta_update = now
 
             progress.setValue(total)
+
+            actual_digest = "sha256:" + sha256.hexdigest()
+            if actual_digest != expected_digest:
+                raise ValueError(f"SHA256 mismatch!\nExpected: {expected_digest}\nGot: {actual_digest}")
+            qDebug(f"{_ID_TAG} SHA256 verified successfully: {actual_digest}")
+
     except Exception as e:
         message = QCoreApplication.translate("main", "Failed to download latest version:\n{exception}").format(
             exception=e)
@@ -420,7 +450,7 @@ def main() -> int:
         QMessageBox.critical(None, title, message)
         qFatal(f"{_ID_TAG} {message_log}")
 
-    if getattr(sys, 'frozen', False):  # Exe Pyinstaller
+    if getattr(sys, "frozen", False):  # Exe Pyinstaller
         if old_exe_path:
             _handle_old_exe_deletion(old_exe_path)
 
