@@ -1,5 +1,7 @@
+$scriptStart = Get-Date
 Write-Host ""
 Write-Host "==== [STEP 1] Convert QT files ====" -ForegroundColor Cyan
+Write-Host "Script started at: $($scriptStart.ToString('HH:mm:ss') )"
 
 & .\convert_qt_files_to_py.ps1
 
@@ -33,4 +35,8 @@ if (-not $?)
 }
 
 Write-Host ""
+$scriptEnd = Get-Date
+$duration = $scriptEnd - $scriptStart
+Write-Host "Script finished at: $($scriptEnd.ToString('HH:mm:ss') )"
+Write-Host ("Total elapsed time: {0:mm\:ss} (mm:ss)" -f $duration) -ForegroundColor Blue
 Write-Host "==== ALL STEPS COMPLETED SUCCESSFULLY ====" -ForegroundColor Green

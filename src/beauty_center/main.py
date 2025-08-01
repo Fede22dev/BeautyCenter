@@ -58,8 +58,7 @@ def _handle_old_exe_deletion(old_path: str) -> None:
     for _ in range(5):
         if file.exists():
             if file.remove():
-                message = QCoreApplication.translate("main", "Deleted old executable: {old_path}").format(
-                    old_path=old_path)
+                message = "Deleted old executable: {old_path}".format(old_path=old_path)
                 qDebug(f"{_ID_TAG} {message}")
                 return
             else:
@@ -90,8 +89,7 @@ def _copy_new_exe(target_path: str) -> None:
         QMessageBox.critical(None, title, message)
         qFatal(f"{_ID_TAG} {message_log}")
     else:
-        message = QCoreApplication.translate("main", "Copied new executable: {target_path}").format(
-            target_path=target_path)
+        message = "Copied new executable: {target_path}".format(target_path=target_path)
         qDebug(f"{_ID_TAG} {message}")
 
 
@@ -106,8 +104,7 @@ def _stop_and_run_new_exe(exe_path: str) -> None:
     success = QProcess.startDetached(exe_path, args)
 
     if success:
-        message = QCoreApplication.translate("main", "Stopped and running new executable: {exe_path}").format(
-            exe_path=exe_path)
+        message = "Stopped and running new executable: {exe_path}".format(exe_path=exe_path)
         qDebug(f"{_ID_TAG} {message}")
         sys.exit(0)
     else:
@@ -130,8 +127,7 @@ def _check_exe_path_desktop() -> None:
 
     # Case-insensitive check (Windows-like)
     if QDir.cleanPath(current_exe_path).lower() == QDir.cleanPath(expected_path).lower():
-        message = QCoreApplication.translate("main", "Executable path is correct: {current_exe_path}").format(
-            current_exe_path=current_exe_path)
+        message = "Executable path is correct: {current_exe_path}".format(current_exe_path=current_exe_path)
         qDebug(f"{_ID_TAG} {message}")
         return
 
@@ -160,8 +156,7 @@ def _check_executable_name() -> None:
     expected_path = QDir(dir_path).filePath(expected_name)
 
     if current_name == expected_name:
-        message = QCoreApplication.translate("main", "Executable name is correct: {current_name}").format(
-            current_name=current_name)
+        message = "Executable name is correct: {current_name}".format(current_name=current_name)
         qDebug(f"{_ID_TAG} {message}")
         return
 
@@ -189,16 +184,14 @@ def _check_connection_quality(max_latency_ms: int = 350) -> bool:
         latency = (time.time() - start) * 1000  # ms
 
         if response.status_code == 204 and latency <= max_latency_ms:
-            message = QCoreApplication.translate("main", "Connection quality is good: {latency} ms").format(
-                latency=int(latency))
+            message = "Connection quality is good: {latency} ms".format(latency=int(latency))
             qDebug(f"{_ID_TAG} {message}")
             return True
         else:
             message = QCoreApplication.translate("main",
                                                  "Connection quality is bad, unable to check new version: {latency} ms").format(
                 latency=int(latency))
-            qWarning(f"{_ID_TAG} {message}")
-            return False
+            raise Exception(message)
     except Exception as e:
         message = QCoreApplication.translate("main",
                                              "Failed to check connection quality, unable to check new version: {exception}").format(
@@ -287,7 +280,7 @@ def _check_is_latest_release() -> None:
     if not download_url or not expected_digest:
         message = QCoreApplication.translate("main", "Failed to get download URL or digest for latest release.")
         QMessageBox.critical(None, title, message)
-        qWarning(f"{_ID_TAG} {message}")
+        qCritical(f"{_ID_TAG} {message}")
         return
 
     message = QCoreApplication.translate("main",
@@ -300,10 +293,17 @@ def _check_is_latest_release() -> None:
             response.raise_for_status()
             total = int(response.headers.get("content-length", 0))
             if total != expected_size:
-                raise Exception(f"Unexpected file size. Expected {expected_size}, got {total}")
+                message = QCoreApplication.translate("main",
+                                                     "Unexpected file size. Expected {expected_size}, got {total}").format(
+                    expected_digest=expected_digest, total=total)
+                raise Exception(message)
+
+            message = "Size verified successfully: {total} bytes".format(total=total)
+            qDebug(f"{_ID_TAG} {message}")
 
             message_template = QCoreApplication.translate("main",
                                                           "Downloading latest version {display_name} to ({out_path})\nETA: {eta}s - Speed: {speed:.1f} MB/s")
+
             progress = QProgressDialog("", "", 0, total)
             progress.setWindowTitle("Download")
             progress.setWindowModality(Qt.WindowModality.WindowModal)
@@ -339,7 +339,8 @@ def _check_is_latest_release() -> None:
                                 h, m = divmod(m, 60)
                                 return f"{int(h):02d}:{int(m):02d}:{int(s):02d}"
 
-                            message = message_template.format(display_name=display_name, out_path=out_path, eta=format_eta(eta), speed=speed)
+                            message = message_template.format(display_name=display_name, out_path=out_path,
+                                                              eta=format_eta(eta), speed=speed)
                             progress.setLabelText(message)
                             last_eta_update = now
 
@@ -347,15 +348,20 @@ def _check_is_latest_release() -> None:
 
             actual_digest = "sha256:" + sha256.hexdigest()
             if actual_digest != expected_digest:
-                raise ValueError(f"SHA256 mismatch!\nExpected: {expected_digest}\nGot: {actual_digest}")
-            qDebug(f"{_ID_TAG} SHA256 verified successfully: {actual_digest}")
+                message = QCoreApplication.translate("main",
+                                                     "SHA256 mismatch!\nExpected: {expected_digest}\nGot: {actual_digest}").format(
+                    expected_digest=expected_digest, actual_digest=actual_digest)
+                raise Exception(message)
+
+            message = "SHA256 verified successfully: {actual_digest}".format(actual_digest=actual_digest)
+            qDebug(f"{_ID_TAG} {message}")
 
     except Exception as e:
         message = QCoreApplication.translate("main", "Failed to download latest version:\n{exception}").format(
             exception=e)
         message_log = message.replace("\n", " ").replace("  ", " ").strip()
         QMessageBox.critical(None, title, message)
-        qWarning(f"{_ID_TAG} {message_log}")
+        qCritical(f"{_ID_TAG} {message_log}")
         return
 
     message = QCoreApplication.translate("main", "Downloaded latest version {display_name} to ({out_path})").format(
@@ -408,19 +414,6 @@ def main() -> int:
     app.setApplicationVersion(APP_VERSION)
     app.setWindowIcon(QIcon(":/icons/windows_icon"))
 
-    locale = QLocale.system()
-    translator = QTranslator()
-    if locale.language() == QLocale.Language.Italian:
-        if translator.load(get_resource_path("translations/generated_qm/it.qm")):
-            app.installTranslator(translator)
-
-            message = QCoreApplication.translate("main", "Loaded Italian translation.")
-            qDebug(f"{_ID_TAG} {message}")
-        else:
-            message = QCoreApplication.translate("main",
-                                                 "Italian translation not found. Use default English translation.")
-            qWarning(f"{_ID_TAG} {message}")
-
     parser = QCommandLineParser()
     parser.setApplicationDescription(APP_NAME)
     parser.addHelpOption()  # Add -h / --help
@@ -439,6 +432,19 @@ def main() -> int:
 
     _GLOBAL_LOG_LEVEL = parser.value(log_level_option)
     old_exe_path = parser.value(delete_old_option) if parser.isSet(delete_old_option) else None
+
+    locale = QLocale.system()
+    translator = QTranslator()
+    if locale.language() == QLocale.Language.Italian:
+        if translator.load(get_resource_path("translations/generated_qm/it.qm")):
+            app.installTranslator(translator)
+
+            message = "Loaded Italian translation."
+            qDebug(f"{_ID_TAG} {message}")
+        else:
+            message = QCoreApplication.translate("main",
+                                                 "Italian translation not found. Use default English translation.")
+            qWarning(f"{_ID_TAG} {message}")
 
     positional_args = parser.positionalArguments()
     if positional_args:
@@ -487,7 +493,7 @@ def main() -> int:
         stream = QTextStream(file)
         app.setStyleSheet(stream.readAll())
 
-        message = QCoreApplication.translate("main", "Loaded style {file_name}").format(file_name=file.fileName())
+        message = "Loaded style {file_name}".format(file_name=file.fileName())
         qDebug(f"{_ID_TAG} {message}")
     else:
         message = QCoreApplication.translate("main", "Failed to load style {file_name}").format(

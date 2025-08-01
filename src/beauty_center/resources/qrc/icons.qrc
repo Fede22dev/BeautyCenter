@@ -8,6 +8,7 @@
         <file alias="appointments_calendar">../icons/appointments_calendar.svg</file>
         <file alias="clients_list">../icons/clients_list.svg</file>
         <file alias="treatments_list">../icons/treatments_list.svg</file>
+        <file alias="statistics">../icons/statistics.svg</file>
         <file alias="settings">../icons/settings.svg</file>
     </qresource>
 </RCC>

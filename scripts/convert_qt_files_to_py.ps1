@@ -1,5 +1,7 @@
+$scriptStart = Get-Date
 Write-Host ""
-Write-Host "`n================= QT UI + QRC -> PY BUILD PIPELINE =================" -ForegroundColor Yellow
+Write-Host "================= QT UI + QRC -> PY BUILD PIPELINE =================" -ForegroundColor Yellow
+Write-Host "Script started at: $($scriptStart.ToString('HH:mm:ss') )"
 
 # --- [STEP 1/7] Define directory structure
 Write-Host ""
@@ -44,15 +46,44 @@ Write-Host "[STEP 3/7] Cleaning old build files..." -ForegroundColor Magenta
 # Remove old UI Python files
 if (Test-Path $outputDir)
 {
-    Get-ChildItem -Path $outputDir -Filter *.py -File | Remove-Item -Force
+    $uiFiles = Get-ChildItem -Path $outputDir -Filter *.py -File
+    if ($uiFiles)
+    {
+        Write-Host "Deleting UI Python files in ${outputDir}: " -ForegroundColor DarkYellow
+
+        foreach ($file in $uiFiles)
+        {
+            Write-Host "  - $( $file.FullName )" -ForegroundColor DarkYellow
+        }
+
+        $uiFiles | Remove-Item -Force
+    }
+    else
+    {
+        Write-Host "No UI Python files to delete in $outputDir." -ForegroundColor DarkYellow
+    }
 }
 
 # Remove old resource Python files in generated_qrc
 if (Test-Path $generatedQrcDir)
 {
-    Get-ChildItem -Path $generatedQrcDir -Filter *_rc.py -File | Remove-Item -Force
-}
+    $rcFiles = Get-ChildItem -Path $generatedQrcDir -Filter *_rc.py -File
+    if ($rcFiles)
+    {
+        Write-Host "Deleting resource Python files in ${generatedQrcDir}: " -ForegroundColor DarkYellow
 
+        foreach ($file in $rcFiles)
+        {
+            Write-Host "  - $( $file.FullName )" -ForegroundColor DarkYellow
+        }
+
+        $rcFiles | Remove-Item -Force
+    }
+    else
+    {
+        Write-Host "No resource Python files to delete in $generatedQrcDir." -ForegroundColor DarkYellow
+    }
+}
 # --- [STEP 4/7] Find PySide6 tools
 Write-Host ""
 Write-Host "[STEP 4/7] Locating pyside6-uic and pyside6-rcc..." -ForegroundColor Magenta
@@ -172,5 +203,9 @@ foreach ($f in $uiPyFiles)
 }
 
 Write-Host ""
+$scriptEnd = Get-Date
+$duration = $scriptEnd - $scriptStart
+Write-Host "Script finished at: $($scriptEnd.ToString('HH:mm:ss') )"
+Write-Host ("Total elapsed time: {0:mm\:ss} (mm:ss)" -f $duration) -ForegroundColor Blue
 Write-Host "Pipeline completed! All UI and QRC files processed with patched imports." -ForegroundColor Yellow
 Write-Host "====================================================================" -ForegroundColor Yellow

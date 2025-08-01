@@ -1,5 +1,7 @@
+$scriptStart = Get-Date
 Write-Host ""
-Write-Host "=== [AUTO-BUILD SCRIPT] ===" -ForegroundColor Cyan
+Write-Host "========= [AUTO-BUILD SCRIPT] =========" -ForegroundColor Cyan
+Write-Host "Script started at: $($scriptStart.ToString('HH:mm:ss') )"
 
 # --- SMART ENVIRONMENT & FLAGS LOGIC ---
 
@@ -201,4 +203,9 @@ else
     Write-Error "[FAIL] Build failed. Check errors above."
 }
 
-Write-Host "=== BUILD SCRIPT COMPLETE ===" -ForegroundColor Cyan
+Write-Host ""
+$scriptEnd = Get-Date
+$duration = $scriptEnd - $scriptStart
+Write-Host "Script finished at: $($scriptEnd.ToString('HH:mm:ss') )"
+Write-Host ("Total elapsed time: {0:mm\:ss} (mm:ss)" -f $duration) -ForegroundColor Blue
+Write-Host "========= BUILD SCRIPT COMPLETE =========" -ForegroundColor Cyan

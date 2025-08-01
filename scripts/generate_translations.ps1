@@ -1,5 +1,7 @@
+$scriptStart = Get-Date
 Write-Host ""
 Write-Host "==================== QT TRANSLATION AUTO-SYNC SCRIPT ====================" -ForegroundColor Yellow
+Write-Host "Script started at: $($scriptStart.ToString('HH:mm:ss') )"
 
 # [INFO] Get script *real* root (.. up from scripts/)
 $ScriptPath = $PSScriptRoot
@@ -155,6 +157,10 @@ foreach ($ts in $TsFiles)
 }
 
 Write-Host ""
+$scriptEnd = Get-Date
+$duration = $scriptEnd - $scriptStart
+Write-Host "Script finished at: $($scriptEnd.ToString('HH:mm:ss') )"
+Write-Host ("Total elapsed time: {0:mm\:ss} (mm:ss)" -f $duration) -ForegroundColor Blue
 Write-Host "[COMPLETE] All .ts translation files updated and compiled to .qm in generated_qm!" -ForegroundColor Magenta
 Write-Host "[INFO] Edit your .ts files with PySide Linguist GUI, e.g.:" -ForegroundColor Cyan
 Write-Host "    .venv\Scripts\pyside6-linguist.exe translations\it.ts"
