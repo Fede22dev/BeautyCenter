@@ -157,8 +157,11 @@ jobs:
       - name: Format commit date
         id: format_date
         run: |
-          RAW="${{ github.event.head_commit.timestamp }}"
-          echo "formatted_date=$(echo ${RAW:0:16} | sed 's/T/ /')" >> "$GITHUB_OUTPUT"
+          $raw = '${{ github.event.head_commit.timestamp }}'
+          $datetime = [datetime]::Parse($raw).ToLocalTime()
+          $timezone = [System.TimeZoneInfo]::Local.IsDaylightSavingTime($datetime) ? "CEST" : "CET"
+          $formatted = $datetime.ToString("yyyy-MM-dd HH:mm") + " ($timezone)"
+          "formatted_date=$formatted" >> $env:GITHUB_OUTPUT
         shell: pwsh
 
       - name: Create or Update Latest Release
