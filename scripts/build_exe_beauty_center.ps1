@@ -165,7 +165,6 @@ $pyArgs = @(
     "--onefile",
     "--clean",
     "--noconfirm",
-    "--strip",
     "--distpath", $exeDir,
     "--workpath", (Join-Path $exeDir "build"),
     "--specpath", $exeDir,

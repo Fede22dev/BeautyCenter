@@ -154,6 +154,13 @@ jobs:
           }
         shell: pwsh
 
+      - name: Format commit date
+        id: format_date
+        run: |
+          RAW="${{ github.event.head_commit.timestamp }}"
+          echo "formatted_date=$(echo ${RAW:0:16} | sed 's/T/ /')" >> "$GITHUB_OUTPUT"
+        shell: pwsh
+
       - name: Create or Update Latest Release
         uses: softprops/action-gh-release@v2
         with:
@@ -164,7 +171,7 @@ jobs:
             
             **🔖 Version:** `${{ env.APP_VERSION }}`
             **🔗 Commit:** `${{ github.sha }}`
-            **📅 Date:** `${{ github.event.head_commit.timestamp }}`
+            **📅 Date:** `${{ steps.format_date.outputs.formatted_date }}`
             
             ### 📋 Build Details
             - **OS:** `${{ runner.os }}`
