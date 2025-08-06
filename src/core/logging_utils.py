@@ -81,11 +81,13 @@ def qFatal(message: str) -> None:
 
 
 def show_box_critical_and_log(id_tag: str, title: str, message: str, fatal: bool = False,
-                              parent: QWidget = None) -> None:
+                              parent: QWidget | None = None) -> None:
     close_splash_screen()
-    QMessageBox.critical(parent, title, message, QMessageBox.StandardButton.Ok)
+
     clean_msg = message.replace("\n", " ").replace("  ", " ").strip()
     if fatal:
+        QMessageBox.critical(parent, title, message, QMessageBox.StandardButton.Ok)
         qFatal(f"{id_tag} {clean_msg}")
     else:
         qCritical(f"{id_tag} {clean_msg}")
+        QMessageBox.critical(parent, title, message, QMessageBox.StandardButton.Ok)
