@@ -45,8 +45,8 @@ ui_*.h
 # -------------------------------
 # My Qt / PySide / PyQt generated files
 # -------------------------------
-src/beauty_center/ui/generated_ui/
-src/beauty_center/resources/generated_qrc/
+src/ui/generated_ui/
+src/resources/generated_qrc/
 translations/generated_qm/
 # These are generated files from Qt tools (e.g., `pyside6-uic`, `pyrcc`) — no need to version them.
 

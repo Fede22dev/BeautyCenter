@@ -14,11 +14,11 @@
    <string notr="true">Beauty Center</string>
   </property>
   <widget class="QWidget" name="central_widget">
-   <layout class="QGridLayout" name="gridLayout">
+   <layout class="QGridLayout" name="grid_layout">
     <item row="0" column="0">
      <layout class="QHBoxLayout" name="main_layout">
       <item>
-       <widget class="QFrame" name="sidebar">
+       <widget class="QFrame" name="sidebar_frame">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
           <horstretch>0</horstretch>
@@ -33,7 +33,7 @@
         </property>
         <property name="maximumSize">
          <size>
-          <width>200</width>
+          <width>220</width>
           <height>16777215</height>
          </size>
         </property>
@@ -60,7 +60,7 @@
           <number>6</number>
          </property>
          <item alignment="Qt::AlignmentFlag::AlignHCenter">
-          <widget class="QPushButton" name="exp_col_sidebar_pb">
+          <widget class="QPushButton" name="exp_col_sidebar_pbtn">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -71,7 +71,7 @@
             <cursorShape>PointingHandCursor</cursorShape>
            </property>
            <property name="icon">
-            <iconset resource="../../resources/qrc/icons.qrc">
+            <iconset resource="../../../resources/qrc/icons.qrc">
              <normaloff>:/icons/menu_open</normaloff>:/icons/menu_open</iconset>
            </property>
            <property name="iconSize">
@@ -99,12 +99,18 @@
           </spacer>
          </item>
          <item>
-          <widget class="QPushButton" name="appointment_page_pb">
+          <widget class="QPushButton" name="appointments_page_pbtn">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+             <fontweight>DemiBold</fontweight>
+            </font>
            </property>
            <property name="cursor">
             <cursorShape>PointingHandCursor</cursorShape>
@@ -113,7 +119,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../../resources/qrc/icons.qrc">
+            <iconset resource="../../../resources/qrc/icons.qrc">
              <normaloff>:/icons/appointments_calendar</normaloff>:/icons/appointments_calendar</iconset>
            </property>
            <property name="iconSize">
@@ -123,17 +129,23 @@
             </size>
            </property>
            <property name="fullText" stdset="0">
-            <string> APPOINTMENTS</string>
+            <string>APPOINTMENTS</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="clients_page_pb">
+          <widget class="QPushButton" name="clients_page_pbtn">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+             <fontweight>DemiBold</fontweight>
+            </font>
            </property>
            <property name="cursor">
             <cursorShape>PointingHandCursor</cursorShape>
@@ -142,7 +154,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../../resources/qrc/icons.qrc">
+            <iconset resource="../../../resources/qrc/icons.qrc">
              <normaloff>:/icons/clients_list</normaloff>:/icons/clients_list</iconset>
            </property>
            <property name="iconSize">
@@ -152,17 +164,23 @@
             </size>
            </property>
            <property name="fullText" stdset="0">
-            <string> CLIENTS</string>
+            <string>CLIENTS</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="treatments_page_pb">
+          <widget class="QPushButton" name="treatments_page_pbtn">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+             <fontweight>DemiBold</fontweight>
+            </font>
            </property>
            <property name="cursor">
             <cursorShape>PointingHandCursor</cursorShape>
@@ -171,7 +189,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../../resources/qrc/icons.qrc">
+            <iconset resource="../../../resources/qrc/icons.qrc">
              <normaloff>:/icons/treatments_list</normaloff>:/icons/treatments_list</iconset>
            </property>
            <property name="iconSize">
@@ -181,17 +199,23 @@
             </size>
            </property>
            <property name="fullText" stdset="0">
-            <string> TREATMENTS</string>
+            <string>TREATMENTS</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="statistics_page_pb">
+          <widget class="QPushButton" name="statistics_page_pbtn">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+             <fontweight>DemiBold</fontweight>
+            </font>
            </property>
            <property name="cursor">
             <cursorShape>PointingHandCursor</cursorShape>
@@ -200,7 +224,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../../resources/qrc/icons.qrc">
+            <iconset resource="../../../resources/qrc/icons.qrc">
              <normaloff>:/icons/statistics</normaloff>:/icons/statistics</iconset>
            </property>
            <property name="iconSize">
@@ -210,7 +234,7 @@
             </size>
            </property>
            <property name="fullText" stdset="0">
-            <string> STATISTICS</string>
+            <string>STATISTICS</string>
            </property>
           </widget>
          </item>
@@ -231,12 +255,18 @@
           </spacer>
          </item>
          <item>
-          <widget class="QPushButton" name="settings_page_pb">
+          <widget class="QPushButton" name="settings_page_pbtn">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+             <fontweight>DemiBold</fontweight>
+            </font>
            </property>
            <property name="cursor">
             <cursorShape>PointingHandCursor</cursorShape>
@@ -245,7 +275,7 @@
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../../resources/qrc/icons.qrc">
+            <iconset resource="../../../resources/qrc/icons.qrc">
              <normaloff>:/icons/settings</normaloff>:/icons/settings</iconset>
            </property>
            <property name="iconSize">
@@ -258,7 +288,7 @@
             <bool>true</bool>
            </property>
            <property name="fullText" stdset="0">
-            <string> SETTINGS</string>
+            <string>SETTINGS</string>
            </property>
           </widget>
          </item>
@@ -290,7 +320,7 @@
   </widget>
  </widget>
  <resources>
-  <include location="../../resources/qrc/icons.qrc"/>
+  <include location="../../../resources/qrc/icons.qrc"/>
  </resources>
  <connections/>
 </ui>

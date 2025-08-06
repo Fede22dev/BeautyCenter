@@ -1,31 +1,11 @@
 /* ─────────────────────────────────────────────────────────────────
-   BeautyCenter Pro – Modern Dark UI Theme
-   Version : 2025-07-25
-   Notes   : A comprehensive stylesheet for a professional and elegant
-             Qt application. This theme uses a high-contrast dark
-             palette with pink accents, consistent 8px rounding,
-             clear focus indicators, and subtle hover effects for an
-             enhanced, modern user experience.
+   BeautyCenter – Modern Dark UI Theme
+   Notes: A comprehensive stylesheet for a professional and elegant
+          Qt application. This theme uses a high-contrast dark
+          palette with pink accents, consistent 8px rounding,
+          clear focus indicators, and subtle hover effects for an
+          enhanced, modern user experience.
  ───────────────────────────────────────────────────────────────── */
-
-/*  PALETTE  ───────────────────────────────────────────────────────
-   Qt Style Sheets do not support variables; colors are declared
-   here just for reference to maintain consistency.
-
-   --background-darker:     #252526; Main window, editor backgrounds
-   --background-dark:       #2D2D30; Toolbars, calendar, panes
-   --surface-dark:          #3C3C3E; Input fields, list items, cards
-   --border-dark:           #505050; Subtle borders
-   --border-focused:        #FF4081; Accent Pink for focus
-   --text-primary:          #F1F1F1; Main text color
-   --text-secondary:        #BFBFBF; Lighter, less important text
-   --text-disabled:         #777777; Disabled text color
-   --accent-pink-light:     #FF79A6; Hover states, highlights
-   --accent-pink:           #FF4081; Main accent, primary buttons, headers
-   --accent-pink-dark:      #E91E63; Pressed states, selected items
-   --accent-pink-darker:    #C2185B; Deep pressed states
-   --white:                 #FFFFFF; Pure white for button text etc.
- ────────────────────────────────────────────────────────────────── */
 
 /* -----------------------------------------------------------------
    GENERAL & MAIN WINDOW
@@ -34,9 +14,6 @@ QWidget
 {
     background-color: #2D2D30;      /* --background-dark */
     color: #F1F1F1;                 /* --text-primary */
-    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-    font-size: 11pt;
-    font-weight: 400;
 }
 
 QMainWindow,
@@ -50,7 +27,6 @@ QDialog
 ----------------------------------------------------------------- */
 QLabel[role="heading"]
 {
-    font-size: 22pt;
     font-weight: 700;
     color: #FF4081;
     letter-spacing: 0.2px;
@@ -59,7 +35,6 @@ QLabel[role="heading"]
 
 QLabel[role="subheading"]
 {
-    font-size: 14pt;
     font-weight: 600;
     color: #FF79A6;
     padding-bottom: 4px;
@@ -67,12 +42,12 @@ QLabel[role="subheading"]
 
 QLabel[role="hint"]
 {
-    font-size: 10pt;
     color: #BFBFBF;
     font-style: italic;
 }
 
-QLabel {
+QLabel
+{
     padding: 2px;
 }
 
@@ -141,27 +116,63 @@ QDateTimeEdit:disabled
 
 /* SpinBox & ComboBox Arrows */
 QSpinBox::up-arrow,
-QSpinBox::down-arrow,
 QDoubleSpinBox::up-arrow,
+QTimeEdit::up-arrow,
+QDateEdit::up-arrow
+{
+    image: url(:/icons/arrow_up);
+    width: 18;
+    height: 18;
+}
+
+QSpinBox::down-arrow,
 QDoubleSpinBox::down-arrow,
-QDateEdit::up-arrow,
+QTimeEdit::down-arrow,
 QDateEdit::down-arrow,
 QComboBox::down-arrow
 {
-    image: none; /* Hide default images */
-    border: none;
+    image: url(:/icons/arrow_down);
+    width: 18;
+    height: 18;
+}
+
+QSpinBox::up-arrow:hover,
+QDoubleSpinBox::up-arrow:hover,
+QTimeEdit::up-arrow:hover,
+QDateEdit::up-arrow:hover
+{
+    border-bottom-color: #FFFFFF;
+}
+
+QSpinBox::down-arrow:hover,
+QDoubleSpinBox::down-arrow:hover,
+QTimeEdit::down-arrow:hover,
+QDateEdit::down-arrow:hover,
+QComboBox::down-arrow:hover
+{
+    border-top-color: #FFFFFF;
 }
 
 QSpinBox::up-button,
-QSpinBox::down-button,
 QDoubleSpinBox::up-button,
+QTimeEdit::up-button,
+QDateEdit::up-button
+{
+    background-color: #505050;
+    width: 20px;
+    border: none;
+    border-top-right-radius: 8px;
+}
+
+QSpinBox::down-button,
 QDoubleSpinBox::down-button,
-QDateEdit::up-button,
+QTimeEdit::down-button,
 QDateEdit::down-button
 {
     background-color: #505050;
     width: 20px;
-    border-radius: 6px;
+    border: none;
+    border-bottom-right-radius: 8px;
 }
 
 QComboBox::drop-down
@@ -177,6 +188,8 @@ QSpinBox::up-button:hover,
 QSpinBox::down-button:hover,
 QDoubleSpinBox::up-button:hover,
 QDoubleSpinBox::down-button:hover,
+QTimeEdit::up-button:hover,
+QTimeEdit::down-button:hover,
 QDateEdit::up-button:hover,
 QDateEdit::down-button:hover,
 QComboBox::drop-down:hover
@@ -193,9 +206,7 @@ QPushButton
     color: #FFFFFF;
     border: none;
     border-radius: 8px;
-    padding: 10px 18px;
-    font-weight: 600;
-    font-size: 11pt;
+    padding: 5px 9px;
 }
 
 QPushButton:hover:enabled
@@ -235,6 +246,36 @@ QPushButton[flat="true"]:pressed:enabled
     color: #FFFFFF;
 }
 
+QToolButton {
+    background-color: #3C3C3E;
+    color: #FF4081;
+    border: 1.5px solid #FF4081;
+    border-radius: 8px;
+    padding: 2px 4px;
+}
+
+QToolButton:checked,
+QToolButton:pressed
+{
+    background-color: #FF4081;
+    color: #FFFFFF;
+    border: 1.5px solid #FF4081;
+}
+
+QToolButton:hover:enabled
+{
+    background-color: #FF79A6;
+    color: #FFFFFF;
+    border: 1.5px solid #FF79A6;
+}
+
+QToolButton:disabled
+{
+    background-color: #444448;
+    color: #777777;
+    border: 1.5px solid #444448;
+}
+
 /* -----------------------------------------------------------------
    TABS
 ----------------------------------------------------------------- */
@@ -252,7 +293,6 @@ QTabBar::tab
     color: #BFBFBF;
     padding: 10px 20px;
     min-width: 120px;
-    font-weight: 600;
     border: 1px solid transparent;
     border-bottom: none;
     border-top-left-radius: 8px;
@@ -292,8 +332,6 @@ QHeaderView::section
     background-color: #FF4081;
     color: #FFFFFF;
     padding: 8px;
-    font-weight: 600;
-    font-size: 10pt;
     border: none;
     border-right: 1px solid #E91E63;
 }
@@ -306,6 +344,7 @@ QHeaderView::section:last
 /* -----------------------------------------------------------------
    CALENDAR WIDGET (Crucial for Appointments)
 ----------------------------------------------------------------- */
+/*
 QCalendarWidget#qt_calendar_navigationbar
 {
     background-color: #FF4081;
@@ -330,8 +369,6 @@ QCalendarWidget#qt_calendar_monthbutton,
 QCalendarWidget#qt_calendar_yearbutton
 {
     color: #FFFFFF;
-    font-weight: 600;
-    font-size: 14pt;
 }
 
 QCalendarWidget#qt_calendar_calendarview
@@ -342,10 +379,10 @@ QCalendarWidget#qt_calendar_calendarview
     selection-color: #FFFFFF;
     border: none;
 }
+*/
 
 QCalendarWidget QAbstractItemView:enabled
 {
-    font-size: 11pt;
     color: #F1F1F1;
 }
 
@@ -360,11 +397,9 @@ QCalendarWidget QAbstractItemView:disabled
 QScrollBar:vertical,
 QScrollBar:horizontal
 {
-    background-color: #252526;      /* --background-darker */
-    width: 16px;
-    height: 16px;
-    margin: 0px;
-    border: none;
+    background-color: #1E1E20;
+    width: 14px;
+    height: 14px;
 }
 
 QScrollBar::handle:vertical,
@@ -373,7 +408,6 @@ QScrollBar::handle:horizontal
     background-color: #505050;
     min-height: 24px;
     min-width: 24px;
-    border-radius: 8px;
 }
 
 QScrollBar::handle:vertical:hover,
@@ -393,7 +427,11 @@ QScrollBar::sub-line,
 QScrollBar::add-page,
 QScrollBar::sub-page
 {
-    height: 0; width: 0;
+    background: none;
+    border: none;
+    height: 0;
+    width: 0;
+    margin: 0;
 }
 
 /* -----------------------------------------------------------------
@@ -403,7 +441,6 @@ QCheckBox,
 QRadioButton
 {
     spacing: 10px;
-    font-size: 11pt;
 }
 
 QCheckBox::indicator,
@@ -505,17 +542,22 @@ QGroupBox
     border: 1px solid #505050;
     border-radius: 8px;
     margin-top: 20px;
-    font-weight: 600;
+    padding: 8px;
 }
 
 QGroupBox::title
 {
     subcontrol-origin: margin;
     subcontrol-position: top center;
-    padding: 4px 12px;
+    padding: 4px;
     background-color: #FF4081;
     color: #FFFFFF;
     border-radius: 8px;
+}
+
+QTableWidget::item:hover
+{
+    background-color: #3A3A3D;
 }
 
 QToolTip
@@ -569,6 +611,16 @@ QSlider::handle:horizontal
 QSlider::handle:horizontal:hover
 {
     background: #FF79A6;
+}
+
+QFrame[frameShape="4"],
+QFrame[frameShape="5"]
+{
+    min-height: 2px;
+    max-height: 2px;
+    background: #FF79A6;
+    border: none;
+    border-radius: 1px;
 }
 
 /* ──────────────────────────  END OF FILE  ────────────────────────── */

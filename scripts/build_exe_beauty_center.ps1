@@ -3,12 +3,11 @@ Write-Host ""
 Write-Host "========= [AUTO-BUILD SCRIPT] =========" -ForegroundColor Cyan
 Write-Host "Script started at: $($scriptStart.ToString('HH:mm:ss') )"
 
-# --- SMART ENVIRONMENT & FLAGS LOGIC ---
-
+# --- SETUP ENVIRONMENT & FLAGS LOGIC ---
 $ScriptPath = $PSScriptRoot
 $ProjectRoot = Split-Path $ScriptPath -Parent
 $exeDir = Join-Path $ProjectRoot "exe"
-$name_version_file = Join-Path $ProjectRoot "src" "beauty_center" "name_version.py"
+$name_version_file = Join-Path $ProjectRoot "src" "name_version.py"
 
 if (-not (Test-Path $name_version_file))
 {
@@ -166,6 +165,7 @@ $pyArgs = @(
     "--onefile",
     "--clean",
     "--noconfirm",
+    "--strip",
     "--distpath", $exeDir,
     "--workpath", (Join-Path $exeDir "build"),
     "--specpath", $exeDir,
@@ -176,8 +176,8 @@ $pyArgs = @(
     "--collect-submodules", "PySide6.QtUiTools",
     "--collect-submodules", "PySide6.QtWidgets",
     "--add-data", "../translations/generated_qm${sep}translations/generated_qm",
-    "--splash", "../src/beauty_center/resources/images/splash_screen.png",
-    "--icon", "../src/beauty_center/resources/icons/windows_icon.ico"
+    "--splash", "../src/resources/images/splash_screen.png",
+    "--icon", "../src/resources/icons/windows_icon.ico"
 )
 
 if ($upx_flag)
@@ -185,7 +185,7 @@ if ($upx_flag)
     $pyArgs += $upx_flag
 }
 
-$pyArgs += "src/beauty_center/main.py"
+$pyArgs += "start_bc.py"
 
 Write-Host ""
 Write-Host "[INFO] PyInstaller command (ready to launch):"

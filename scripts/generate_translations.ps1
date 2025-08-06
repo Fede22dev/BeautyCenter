@@ -35,6 +35,7 @@ if (-not (Test-Path $LupdateExe))
     Write-Error "[ERROR] pyside6-lupdate.exe NOT FOUND in '$VenvScripts'! Did you 'pip install pyside6-tools'?";
     exit 1
 }
+
 if (-not (Test-Path $LreleaseExe))
 {
     Write-Error "[ERROR] pyside6-lrelease.exe NOT FOUND in '$VenvScripts'! Did you 'pip install pyside6-tools'?";

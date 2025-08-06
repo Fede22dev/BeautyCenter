@@ -9,9 +9,9 @@ Write-Host "[STEP 1/7] Setting up paths..." -ForegroundColor Magenta
 
 $ScriptPath = $PSScriptRoot
 $ProjectRoot = Split-Path $ScriptPath -Parent
-$inputDir = Join-Path $ProjectRoot "src" "beauty_center" "ui" "views"
-$outputDir = Join-Path $ProjectRoot "src" "beauty_center" "ui" "generated_ui"
-$resourcesDir = Join-Path $ProjectRoot "src" "beauty_center" "resources"
+$inputDir = Join-Path $ProjectRoot "src" "ui" "views"
+$outputDir = Join-Path $ProjectRoot "src" "ui" "generated_ui"
+$resourcesDir = Join-Path $ProjectRoot "src" "resources"
 $qrcDir = Join-Path $resourcesDir "qrc"
 $generatedQrcDir = Join-Path $resourcesDir "generated_qrc"
 
@@ -94,6 +94,7 @@ function Find-Tool($winPath, $nixPath, $toolName)
     {
         return $winPath
     }
+
     if (Test-Path $nixPath)
     {
         return $nixPath
@@ -182,7 +183,7 @@ Write-Host ""
 Write-Host ("[STEP 7/7] Patching resource imports (e.g., icons_rc, images_rc, styles_rc)...") -ForegroundColor Magenta
 
 $patchPattern = 'import (\w+_rc)\b'
-$patchReplacement = 'from resources.generated_qrc import $1'
+$patchReplacement = 'from src.resources.generated_qrc import $1'
 
 $uiPyFiles = Get-ChildItem -Path $outputDir -Filter *.py
 

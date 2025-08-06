@@ -23,10 +23,10 @@ if (-not $?)
 }
 
 Write-Host ""
-Write-Host "==== [STEP 3] Run main.py ====" -ForegroundColor Cyan
+Write-Host "==== [STEP 3] Run start_bc.py ====" -ForegroundColor Cyan
 
 Set-Location ..
-& .venv\Scripts\python.exe src/beauty_center/main.py
+& .venv\Scripts\python.exe start_bc.py
 
 if (-not $?)
 {

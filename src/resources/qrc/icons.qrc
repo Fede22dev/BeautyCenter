@@ -3,12 +3,20 @@
     <qresource prefix="/icons">
         <file alias="windows_icon">../icons/windows_icon.ico</file>
 
-        <file alias="menu_close">../icons/menu_close.svg</file>
         <file alias="menu_open">../icons/menu_open.svg</file>
+        <file alias="menu_close">../icons/menu_close.svg</file>
+
         <file alias="appointments_calendar">../icons/appointments_calendar.svg</file>
+        <file alias="today_calendar">../icons/today_calendar.svg</file>
+
         <file alias="clients_list">../icons/clients_list.svg</file>
         <file alias="treatments_list">../icons/treatments_list.svg</file>
         <file alias="statistics">../icons/statistics.svg</file>
         <file alias="settings">../icons/settings.svg</file>
+
+        <file alias="palette">../icons/palette.svg</file>
+
+        <file alias="arrow_up">../icons/arrow_up.svg</file>
+        <file alias="arrow_down">../icons/arrow_down.svg</file>
     </qresource>
 </RCC>

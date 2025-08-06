@@ -73,7 +73,7 @@ jobs:
           pip install -r requirements.txt
           pip install pyinstaller
           
-          $filePath = "src/beauty_center/name_version.py"
+          $filePath = "src/name_version.py"
           
           $nameMatch = Get-Content $filePath | Select-String -Pattern "APP_NAME\s*=\s*['""](.*?)['""]"
           if ($null -ne $nameMatch) 
