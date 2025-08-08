@@ -1,4 +1,8 @@
+platformdirs
+alembic
 PySide6~=6.9.1
 requests~=2.32.4
 packaging~=25.0
 tqdm~=4.67.1
+pydantic
+sqlalchemy

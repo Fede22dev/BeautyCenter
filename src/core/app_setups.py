@@ -2,7 +2,7 @@ from PySide6.QtCore import QCommandLineParser, QCommandLineOption, QCoreApplicat
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QApplication
 
-from src.core.logging_utils import set_log_level, show_box_critical_and_log
+from src.core.logging_utils import show_box_critical_and_log
 from src.name_version import APP_NAME, APP_VERSION
 
 _ID_TAG = "[APP_SETUP]"
@@ -34,7 +34,7 @@ def setup_app_args_parser(app: QApplication) -> str | None:
 
     parser.process(app)
 
-    set_log_level(parser.value(log_level_option))
+    #set_log_level(parser.value(log_level_option)) TODO REACTIVATE FOR FINAL EXE RELEASE
 
     positional_args = parser.positionalArguments()
     if positional_args:

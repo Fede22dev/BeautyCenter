@@ -2,7 +2,7 @@ from enum import IntEnum
 
 from PySide6.QtCore import QPropertyAnimation, QEasingCurve
 from PySide6.QtGui import QIcon
-from PySide6.QtWidgets import QMainWindow, QPushButton
+from PySide6.QtWidgets import QMainWindow, QPushButton, QWidget
 from src.resources.generated_qrc import icons_rc  # noqa: F401
 from src.ui.generated_ui.main_window import Ui_beauty_center_main_window
 
@@ -16,8 +16,8 @@ from src.ui.controllers.treatments.treatments_page import TreatmentsPage
 class PageIndex(IntEnum):
     APPOINTMENTS = 0
     CLIENTS = 1
-    STATISTICS = 2
-    TREATMENTS = 3
+    TREATMENTS = 2
+    STATISTICS = 3
     SETTINGS = 4
 
 
@@ -48,21 +48,25 @@ class BeautyCenterMainWindow(QMainWindow):
         self._sidebar_animation.finished.connect(self._on_animation_finished)
         self.ui.exp_col_sidebar_pbtn.clicked.connect(self._toggle_sidebar)
 
-        self.ui.appointments_page_pbtn.clicked.connect(
-            lambda: self.ui.stacked_widget.setCurrentIndex(PageIndex.APPOINTMENTS))
-        self.ui.clients_page_pbtn.clicked.connect(lambda: self.ui.stacked_widget.setCurrentIndex(PageIndex.CLIENTS))
-        self.ui.statistics_page_pbtn.clicked.connect(
-            lambda: self.ui.stacked_widget.setCurrentIndex(PageIndex.STATISTICS))
-        self.ui.treatments_page_pbtn.clicked.connect(
-            lambda: self.ui.stacked_widget.setCurrentIndex(PageIndex.TREATMENTS))
-        self.ui.settings_page_pbtn.clicked.connect(lambda: self.ui.stacked_widget.setCurrentIndex(PageIndex.SETTINGS))
+        self.ui.appointments_page_pbtn.clicked.connect(lambda: self._load_change_page(PageIndex.APPOINTMENTS))
+        self.ui.clients_page_pbtn.clicked.connect(lambda: self._load_change_page(PageIndex.CLIENTS))
+        self.ui.treatments_page_pbtn.clicked.connect(lambda: self._load_change_page(PageIndex.TREATMENTS))
+        self.ui.statistics_page_pbtn.clicked.connect(lambda: self._load_change_page(PageIndex.STATISTICS))
+        self.ui.settings_page_pbtn.clicked.connect(lambda: self._load_change_page(PageIndex.SETTINGS))
 
     def _setup_stacked_pages(self) -> None:
-        self.ui.stacked_widget.addWidget(AppointmentsPage())
-        self.ui.stacked_widget.addWidget(ClientsPage())
-        self.ui.stacked_widget.addWidget(StatisticsPage())
-        self.ui.stacked_widget.addWidget(TreatmentsPage())
-        self.ui.stacked_widget.addWidget(SettingsPage())
+        self._appointments_page = AppointmentsPage()  # Load only the first page when open app
+        self.ui.stacked_widget.insertWidget(PageIndex.APPOINTMENTS, self._appointments_page)
+
+        # Other pages will be loaded on demand
+        self._clients_page = None
+        self._treatments_page = None
+        self._statistics_page = None
+        self._settings_page = None
+
+        # Placeholder to avoid inserting out-of-bound
+        for idx in (PageIndex.CLIENTS, PageIndex.TREATMENTS, PageIndex.STATISTICS, PageIndex.SETTINGS):
+            self.ui.stacked_widget.insertWidget(idx, QWidget())
 
     def _on_animation_finished(self) -> None:
         if self._is_sidebar_expanded:
@@ -88,3 +92,27 @@ class BeautyCenterMainWindow(QMainWindow):
         for btn in self._sidebar_buttons:
             full_text = btn.property("fullText") or ""
             btn.setText(full_text if self._is_sidebar_expanded else "")
+
+    def _load_change_page(self, page_index: PageIndex) -> None:
+        # Appointments page is loaded when open app
+        #if page_index == PageIndex.APPOINTMENTS and self._appointments_page is None:
+        #    self._appointments_page = AppointmentsPage()
+        #    self.ui.stacked_widget.insertWidget(page_index, self._appointments_page)
+        if page_index == PageIndex.CLIENTS and self._clients_page is None:
+            self.ui.stacked_widget.removeWidget(self.ui.stacked_widget.widget(PageIndex.CLIENTS))
+            self._clients_page = ClientsPage()
+            self.ui.stacked_widget.insertWidget(page_index, self._clients_page)
+        elif page_index == PageIndex.TREATMENTS and self._treatments_page is None:
+            self.ui.stacked_widget.removeWidget(self.ui.stacked_widget.widget(PageIndex.TREATMENTS))
+            self._treatments_page = TreatmentsPage()
+            self.ui.stacked_widget.insertWidget(page_index, self._treatments_page)
+        elif page_index == PageIndex.STATISTICS and self._statistics_page is None:
+            self.ui.stacked_widget.removeWidget(self.ui.stacked_widget.widget(PageIndex.STATISTICS))
+            self._statistics_page = StatisticsPage()
+            self.ui.stacked_widget.insertWidget(page_index, self._statistics_page)
+        elif page_index == PageIndex.SETTINGS and self._settings_page is None:
+            self.ui.stacked_widget.removeWidget(self.ui.stacked_widget.widget(PageIndex.SETTINGS))
+            self._settings_page = SettingsPage()
+            self.ui.stacked_widget.insertWidget(page_index, self._settings_page)
+
+        self.ui.stacked_widget.setCurrentIndex(page_index)

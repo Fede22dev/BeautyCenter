@@ -24,6 +24,7 @@ env/
 # -------------------------------
 *.sqlite3
 *.db
+!db/placeholder.db
 # Comment the line above (*.sqlite3) if you want to version-control a pre-populated database file
 # (e.g., with demo data or test records).
 # In production, it's usually best to exclude database files from git.

@@ -18,7 +18,7 @@ class LogLevel(StrEnum):
     FATAL = "fatal"
 
 
-_LOG_LEVEL = LogLevel.DEBUG  # TODO CHANGE TO INFO FOR FINAL EXE RELEASE
+_LOG_LEVEL = LogLevel.DEBUG # Default
 
 
 def setup_logging() -> None:

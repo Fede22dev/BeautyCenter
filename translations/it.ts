@@ -25,22 +25,22 @@ Error: {error}</source>
 <context>
     <name>app_path_utils</name>
     <message>
-        <location filename="../src/core/app_path_utils.py" line="22"/>
+        <location filename="../src/core/paths_utils.py" line="22"/>
         <source>Old executable not found: {old_path}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/core/app_path_utils.py" line="33"/>
+        <location filename="../src/core/paths_utils.py" line="33"/>
         <source>Failed to delete old executable: {old_path}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/core/app_path_utils.py" line="53"/>
+        <location filename="../src/core/paths_utils.py" line="53"/>
         <source>Incorrect Executable Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/core/app_path_utils.py" line="54"/>
+        <location filename="../src/core/paths_utils.py" line="54"/>
         <source>The executable has been renamed:
 Expected: {expected_name}
 Found: {current_name}
@@ -49,12 +49,12 @@ The correct name will now be restored.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/core/app_path_utils.py" line="74"/>
+        <location filename="../src/core/paths_utils.py" line="74"/>
         <source>Incorrect Executable Path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/core/app_path_utils.py" line="75"/>
+        <location filename="../src/core/paths_utils.py" line="75"/>
         <source>The executable has been moved in other dir:
 Expected: {expected_exe_path}
 Found: {current_exe_path}
@@ -332,62 +332,58 @@ Use --help or -h for usage information.</source>
     <name>settings_page</name>
     <message>
         <location filename="../src/ui/views/settings/settings_page.ui" line="31"/>
-        <location filename="../src/ui/views/settings/settings_page.ui" line="86"/>
+        <location filename="../src/ui/views/settings/settings_page.ui" line="80"/>
         <source>Cabins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/views/settings/settings_page.ui" line="47"/>
+        <location filename="../src/ui/views/settings/settings_page.ui" line="44"/>
         <source>Cabins Numbers:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/views/settings/settings_page.ui" line="91"/>
+        <location filename="../src/ui/views/settings/settings_page.ui" line="85"/>
         <source>Color Pickers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/views/settings/settings_page.ui" line="112"/>
+        <location filename="../src/ui/views/settings/settings_page.ui" line="106"/>
+        <location filename="../src/ui/views/settings/settings_page.ui" line="154"/>
         <source>Operators</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/views/settings/settings_page.ui" line="129"/>
+        <location filename="../src/ui/views/settings/settings_page.ui" line="120"/>
         <source>Operators Numbers:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/views/settings/settings_page.ui" line="166"/>
-        <source>Operator</source>
+        <location filename="../src/ui/views/settings/settings_page.ui" line="186"/>
+        <source>Minimum Start:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/views/settings/settings_page.ui" line="171"/>
+        <location filename="../src/ui/views/settings/settings_page.ui" line="228"/>
+        <source>Maximum Finish:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ui/views/settings/settings_page.ui" line="159"/>
         <source>Names</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/views/settings/settings_page.ui" line="187"/>
+        <location filename="../src/ui/views/settings/settings_page.ui" line="175"/>
         <source>Working Hours</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/views/settings/settings_page.ui" line="201"/>
-        <source>Start:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/ui/views/settings/settings_page.ui" line="247"/>
-        <source>Finish:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/ui/views/settings/settings_page.ui" line="296"/>
+        <location filename="../src/ui/views/settings/settings_page.ui" line="276"/>
         <source>Save Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ui/views/settings/settings_page.ui" line="96"/>
+        <location filename="../src/ui/views/settings/settings_page.ui" line="90"/>
         <source>Colors</source>
         <translation type="unfinished"></translation>
     </message>

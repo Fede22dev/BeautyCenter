@@ -80,8 +80,9 @@ def check_exe_path_desktop() -> None:
     _stop_and_run_new_exe(expected_exe_path)
 
 
-# Get an absolute path to resource (compatible with PyInstaller)
-def _get_resource_path(relative_path: str) -> str:
+# Get an absolute path to resource (compatible with PyInstaller).
+# Can use it for a single file or also for a directory
+def get_resource_path(relative_path: str) -> str:
     base_path = getattr(sys, '_MEIPASS', QDir.currentPath())
     return QDir(base_path).filePath(relative_path)
 

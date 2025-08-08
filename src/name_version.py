@@ -1,5 +1,17 @@
+import os
+import sys
+
+from platformdirs import user_data_dir
+
 APP_NAME = "Beauty Center"
 GITHUB_REPO_NAME = "Fede22dev/BeautyCenter"
+
+if getattr(sys, "frozen", False):  # Exe Pyinstaller
+    __data_dir = user_data_dir(APP_NAME)
+    os.makedirs(__data_dir, exist_ok=True)
+    DB_PATH = os.path.join(__data_dir, APP_NAME.lower().replace(' ', '_'))
+else:
+    DB_PATH = APP_NAME.lower().replace(' ', '_')
 
 """
 App version following Semantic Versioning (SemVer):
@@ -23,4 +35,4 @@ Example:
  1.1.1 = bug fix on version 1.1.0
  2.0.0 = breaking change, major rewrite
 """
-APP_VERSION = "0.0.8"
+APP_VERSION = "0.0.9"

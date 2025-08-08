@@ -9,7 +9,7 @@ from PySide6.QtWidgets import QMessageBox, QProgressDialog, QApplication
 from packaging import version
 from tqdm import tqdm
 
-from src.core.app_path_utils import _get_desktop_path
+from src.core.paths_utils import _get_desktop_path
 from src.core.process_utils import _stop_and_run_new_exe
 from src.core.ui_utils import close_splash_screen
 from src.name_version import GITHUB_REPO_NAME, APP_NAME, APP_VERSION

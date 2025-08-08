@@ -5,13 +5,15 @@ from PySide6.QtWidgets import QApplication
 from src.resources.generated_qrc import icons_rc  # noqa: F401
 
 from src.core.app_instance import check_another_instance_running, start_local_server
-from src.core.app_path_utils import handle_old_exe_deletion, check_exe_path_desktop, check_executable_name
+from src.core.paths_utils import handle_old_exe_deletion, check_exe_path_desktop, check_executable_name
 from src.core.app_setups import setup_app_metadata, setup_app_args_parser
 from src.core.logging_utils import setup_logging, set_log_level, LogLevel
 from src.core.network_utils import check_connection_quality
 from src.core.style_and_translation import load_translation, load_style
 from src.core.ui_utils import close_splash_screen
 from src.core.updater import download_latest_exe_if_exist
+from src.databases.local.local_db import create_tables, is_db_empty
+from src.databases.migrations.migrations import run_auto_migrations, stamp_alembic_head
 from src.name_version import APP_NAME, APP_VERSION
 from src.ui.controllers.main.main_window import BeautyCenterMainWindow
 
@@ -41,16 +43,18 @@ def main() -> int:
 
     qDebug(f"{_ID_TAG} Start: {APP_NAME} v. {APP_VERSION}")
 
-    # Check if the app is a single instance
     check_another_instance_running()
     start_local_server()
 
     load_style(app)
 
-    # Load and show UI
+    if is_db_empty():
+        create_tables()
+        stamp_alembic_head()
+    else:
+        run_auto_migrations()
+
     main_window = BeautyCenterMainWindow()
-
     close_splash_screen()
-
     main_window.show()
     return app.exec()

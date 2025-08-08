@@ -42,7 +42,7 @@ class AppointmentDialog(QDialog):
             "operator": self.ui.operators_ckb.currentText(),
             "start": self.ui.start_tedit.time().toString("HH:mm"),
             "duration": self.ui.duration_spinb.value(),
-            "client": self.ui.client_ckb.currentText(),
+            "client": self.ui.clients_ckb.currentText(),
             "treatment": self.ui.treatments_ckb.currentText(),
             "cabin": self.ui.cabins_ckb.currentData(),
             "notes": self.ui.notes_txtedit.toPlainText()

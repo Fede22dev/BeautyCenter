@@ -76,11 +76,11 @@ class AppointmentsPlannerScene(QGraphicsScene):
         self.clients = list(DEFAULT_CLIENTS)
         self.work_start = "07:00"
         self.work_end = "22:00"
-        self.slot_minutes = 30
+        self.slot_minutes = 60
         self.grid_left = 80
         self.header_height = 44
         self.cell_width_min = 110
-        self.cell_height = 42
+        self.cell_height = 57
         self.appointments = []
         self.grid = {}
         self._on_appointment_create = None
@@ -155,7 +155,7 @@ class AppointmentsPlannerScene(QGraphicsScene):
             label.setBrush(QColor("#BFBFBF"))
             # Center text horizontally and vertically in grid_left/self.cell_h
             br = label.boundingRect()
-            cx = (self.grid_left - br.width()) / 2
+            cx = (self.grid_left - br.width()) / 2 + 4
             cy = y + (self.cell_height - br.height()) / 2
             label.setPos(cx, cy)
             self.addItem(label)

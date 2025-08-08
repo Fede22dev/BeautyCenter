@@ -75,7 +75,7 @@ else
     }
 }
 
-$console_or_windowed_flag = "--console" # TODO REMOVE FOR FINAL RELEASE
+$console_or_windowed_flag = "--console" # TODO REMOVE FOR FINAL EXE RELEASE
 
 # --- PRE BUILD: CONVERT QT FILES TO PY ---
 Write-Host ""
@@ -174,7 +174,10 @@ $pyArgs = @(
     "--collect-submodules", "PySide6.QtNetwork",
     "--collect-submodules", "PySide6.QtUiTools",
     "--collect-submodules", "PySide6.QtWidgets",
+    "--collect-submodules", "logging",
     "--add-data", "../translations/generated_qm${sep}translations/generated_qm",
+    "--add-data", "../alembic${sep}alembic",
+    "--add-data", "../src/databases/migrations${sep}src/databases/migrations",
     "--splash", "../src/resources/images/splash_screen.png",
     "--icon", "../src/resources/icons/windows_icon.ico"
 )
