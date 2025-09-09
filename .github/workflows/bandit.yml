@@ -2,12 +2,11 @@ name: Security Scan (Bandit)
 
 on:
   push:
+    tags:
+      - '*v'
     paths:
       - '**.py'
       - '.github/workflows/bandit.yml'
-  pull_request:
-  schedule:
-    - cron: '0 2 * * 1'  # Weekly scan
 
 jobs:
   bandit:

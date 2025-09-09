@@ -2,11 +2,12 @@ name: Code Quality (Pylint)
 
 on:
   push:
+    tags:
+      - '*v'
     paths:
       - '**.py'
       - '.github/workflows/pylint.yml'
       - 'requirements.txt'
-  pull_request:
 
 jobs:
   lint:

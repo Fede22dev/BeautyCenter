@@ -1,7 +1,9 @@
 name: Build and Release
 
 on:
-  [ push ]
+  push:
+    tags:
+      - '*v'
 
 env:
   RELEASE_TAG: latest-build

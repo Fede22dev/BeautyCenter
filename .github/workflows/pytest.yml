@@ -2,11 +2,12 @@ name: Tests
 
 on:
   push:
+    tags:
+      - '*v'
     paths:
       - '**.py'
       - 'requirements.txt'
       - '.github/workflows/pytest.yml'
-  pull_request:
 
 jobs:
   test:
