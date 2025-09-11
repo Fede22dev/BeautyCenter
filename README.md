@@ -2,6 +2,10 @@
 
 > Desktop appointment manager for beauty & wellness centers — powered by Python + Qt.
 
+**⚠️ This project has been discontinued and is no longer maintained.  
+The development has moved to Flutter — check out the new repository
+here: [BeautyCenter Flutter](https://github.com/Fede22dev/beauty_center)**
+
 ---
 
 ### 📊 Status & Metrics
@@ -45,8 +49,8 @@ It helps beauty and wellness centers manage:
 The app uses **Qt Designer** and a **modular MVC pattern**:
 
 - Each page is split into:
-  - `.ui` file (view/layout)
-  - `.py` file (logic/controller)
+    - `.ui` file (view/layout)
+    - `.py` file (logic/controller)
 
 ---
 
@@ -70,6 +74,7 @@ pip install -r requirements.txt
 ```
 
 Then run the app:
+
 ```pycon
 python start_bc.py
 ```
